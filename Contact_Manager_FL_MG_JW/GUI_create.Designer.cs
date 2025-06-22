@@ -44,11 +44,19 @@
             // label1
             // 
             label1.AutoSize = true;
+<<<<<<< HEAD
             label1.Location = new Point(217, 127);
             label1.Name = "label1";
             label1.Size = new Size(38, 15);
             label1.TabIndex = 1;
             label1.Text = "label1";
+=======
+            label1.Location = new Point(346, 287);
+            label1.Name = "label1";
+            label1.Size = new Size(35, 15);
+            label1.TabIndex = 1;
+            label1.Text = "Hallo";
+>>>>>>> f75ae39953647503d1296f31e7674668cc31dafa
             // 
             // GUI_create
             // 
