@@ -1,8 +1,8 @@
 namespace Contact_Manager_FL_MG_JW
 {
-    public partial class Form1 : Form
+    public partial class GUI_Dashboard : Form
     {
-        public Form1()
+        public GUI_Dashboard()
         {
             InitializeComponent();
         }

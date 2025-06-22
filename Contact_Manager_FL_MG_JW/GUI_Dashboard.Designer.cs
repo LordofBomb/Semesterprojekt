@@ -1,6 +1,6 @@
 ﻿namespace Contact_Manager_FL_MG_JW
 {
-    partial class Form1
+    partial class GUI_Dashboard
     {
         /// <summary>
         ///  Required designer variable.
