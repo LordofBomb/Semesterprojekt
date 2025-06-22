@@ -16,5 +16,10 @@ namespace Contact_Manager_FL_MG_JW
         {
             InitializeComponent();
         }
+
+        private void GUI_create_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
