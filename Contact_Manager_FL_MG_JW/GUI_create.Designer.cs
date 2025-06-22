@@ -1,6 +1,6 @@
 ﻿namespace Contact_Manager_FL_MG_JW
 {
-    partial class GUI_create
+    partial class GUI_Create
     {
         /// <summary>
         /// Required designer variable.
@@ -28,53 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            label1 = new Label();
-            SuspendLayout();
-            // 
-            // button1
-            // 
-            button1.Location = new Point(295, 214);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 0;
-            button1.Text = "NEIN";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-<<<<<<< HEAD
-            label1.Location = new Point(217, 127);
-            label1.Name = "label1";
-            label1.Size = new Size(38, 15);
-            label1.TabIndex = 1;
-            label1.Text = "label1";
-=======
-            label1.Location = new Point(346, 287);
-            label1.Name = "label1";
-            label1.Size = new Size(35, 15);
-            label1.TabIndex = 1;
-            label1.Text = "Hallo";
->>>>>>> f75ae39953647503d1296f31e7674668cc31dafa
-            // 
-            // GUI_create
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(label1);
-            Controls.Add(button1);
-            Name = "GUI_create";
-            Text = "Form2";
-            Load += GUI_create_Load;
-            ResumeLayout(false);
-            PerformLayout();
+            this.components = new System.ComponentModel.Container();
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Text = "Form1";
         }
 
         #endregion
-
-        private Button button1;
-        private Label label1;
     }
 }

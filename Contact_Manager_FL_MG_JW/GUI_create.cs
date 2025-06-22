@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace Contact_Manager_FL_MG_JW
 {
-    public partial class GUI_create : Form
+    public partial class GUI_Create : Form
     {
-        public GUI_create()
+        public GUI_Create()
         {
             InitializeComponent();
-        }
-
-        private void GUI_create_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
