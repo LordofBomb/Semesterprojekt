@@ -16,5 +16,11 @@ namespace Contact_Manager_FL_MG_JW
         {
             InitializeComponent();
         }
+
+        private void ddlGender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

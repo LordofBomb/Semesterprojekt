@@ -28,56 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
+            bttmCreateOnDash = new Button();
+            lblTitel = new Label();
             SuspendLayout();
             // 
-            // label1
+            // bttmCreateOnDash
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(289, 159);
-            label1.Name = "label1";
-            label1.Size = new Size(33, 15);
-            label1.TabIndex = 0;
-            label1.Text = "TEST";
+            bttmCreateOnDash.Location = new Point(305, 229);
+            bttmCreateOnDash.Name = "bttmCreateOnDash";
+            bttmCreateOnDash.Size = new Size(172, 59);
+            bttmCreateOnDash.TabIndex = 0;
+            bttmCreateOnDash.Text = "Neuer Kontakt erstellen";
+            bttmCreateOnDash.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // lblTitel
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(319, 257);
-            label2.Name = "label2";
-            label2.Size = new Size(39, 15);
-            label2.TabIndex = 1;
-            label2.Text = "TEST2";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(450, 182);
-            label3.Name = "label3";
-            label3.Size = new Size(35, 15);
-            label3.TabIndex = 2;
-            label3.Text = "test 3";
+            lblTitel.AutoSize = true;
+            lblTitel.Location = new Point(339, 63);
+            lblTitel.Name = "lblTitel";
+            lblTitel.Size = new Size(99, 15);
+            lblTitel.TabIndex = 1;
+            lblTitel.Text = "Contact Manager";
             // 
             // GUI_Dashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(lblTitel);
+            Controls.Add(bttmCreateOnDash);
             Name = "GUI_Dashboard";
-            Text = "Form1";
+            Text = "Dashboard";
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label label1;
-        private Label label2;
-        private Label label3;
+        private Button bttmCreateOnDash;
+        private Label lblTitel;
     }
 }
