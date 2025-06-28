@@ -40,6 +40,7 @@
             bttmCreateOnDash.TabIndex = 0;
             bttmCreateOnDash.Text = "Neuer Kontakt erstellen";
             bttmCreateOnDash.UseVisualStyleBackColor = true;
+            bttmCreateOnDash.Click += bttmCreateOnDash_Click;
             // 
             // lblTitel
             // 
