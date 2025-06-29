@@ -11,6 +11,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Contact_Manager_FL_MG_JW
 {
@@ -137,6 +138,10 @@ namespace Contact_Manager_FL_MG_JW
                         cmdMitarbeiter.Parameters.AddWithValue("@tätigkeitsbezeichnung", taetigkeit);
                         cmdMitarbeiter.Parameters.AddWithValue("@telefon", telefonintern);
                         cmdMitarbeiter.Parameters.AddWithValue("@globalid", globalId);
+
+
+
+
                         try
                         {
                             command.ExecuteNonQuery();
@@ -146,7 +151,28 @@ namespace Contact_Manager_FL_MG_JW
                         {
                             MessageBox.Show("Fehler: " + ex.Message);
                         }
+
                         cmdMitarbeiter.ExecuteNonQuery();
+
+                        long mitarbeiterId = connection.LastInsertRowId;
+
+                        if (ChbTrainee.Checked)
+                        {
+                            string lehrjahre = txtbNrOfYearsOfAppr.Text;
+                            string aktuelleslehrjahr = txtbWhYearsOfAppr.Text;
+                            string insertLernender = @"
+                            INSERT INTO Lernender
+                            (lehrjahre, aktuelleslehrjahr, mitarbeiterid)
+                            VALUES
+                            (@lehrjahre, @aktuelleslehrjahr, @mitarbeiterid);";
+                            var cmdLernender = new SQLiteCommand(insertLernender, connection);
+                            cmdLernender.Parameters.AddWithValue("@lehrjahre", lehrjahre);
+                            cmdLernender.Parameters.AddWithValue("@aktuelleslehrjahr", aktuelleslehrjahr);
+                            cmdLernender.Parameters.AddWithValue("@mitarbeiterid", mitarbeiterId);
+                            cmdLernender.ExecuteNonQuery();
+                        }
+
+
                     }
 
                     if (rbttCustomer.Checked)
