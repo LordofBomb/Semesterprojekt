@@ -97,6 +97,7 @@
             groupBoxCustomer = new GroupBox();
             groupBoxEmployee = new GroupBox();
             groupBoxTrainee = new GroupBox();
+            BtnSave = new Button();
             ((System.ComponentModel.ISupportInitialize)nudEmpLevel).BeginInit();
             groupBoxCustomer.SuspendLayout();
             groupBoxEmployee.SuspendLayout();
@@ -739,11 +740,22 @@
             groupBoxTrainee.TabIndex = 69;
             groupBoxTrainee.TabStop = false;
             // 
+            // BtnSave
+            // 
+            BtnSave.Location = new Point(276, 671);
+            BtnSave.Name = "BtnSave";
+            BtnSave.Size = new Size(326, 44);
+            BtnSave.TabIndex = 71;
+            BtnSave.Text = "Eintrag speichern";
+            BtnSave.UseVisualStyleBackColor = true;
+            BtnSave.Click += BtnSave_Click;
+            // 
             // GUI_Create
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(868, 911);
+            Controls.Add(BtnSave);
             Controls.Add(groupBoxEmployee);
             Controls.Add(rbttEmployee);
             Controls.Add(groupBoxCustomer);
@@ -848,5 +860,6 @@
         private GroupBox groupBoxCustomer;
         private GroupBox groupBoxEmployee;
         private GroupBox groupBoxTrainee;
+        private Button BtnSave;
     }
 }
