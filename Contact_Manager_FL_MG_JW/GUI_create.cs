@@ -96,7 +96,10 @@ namespace Contact_Manager_FL_MG_JW
 
                     if (!rbttCustomer.Checked && !rbttEmployee.Checked)
                     {
-                        MessageBox.Show("Fehler! Bitte Kunde oder Mitarbeiter auswählen!");
+                        MessageBox.Show("Bitte Kunde oder Mitarbeiter auswählen!", "Fehler!",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error
+                                        );
                     }
 
                     long globalId = connection.LastInsertRowId;
@@ -145,11 +148,17 @@ namespace Contact_Manager_FL_MG_JW
                         try
                         {
                             command.ExecuteNonQuery();
-                            MessageBox.Show("Daten erfolgreich gespeichert!");
+                            MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information
+                            );
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Fehler: " + ex.Message);
+                            MessageBox.Show("Fehler: " + ex.Message, "Fehler!",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error
+                            );
                         }
 
                         cmdMitarbeiter.ExecuteNonQuery();
@@ -200,7 +209,10 @@ namespace Contact_Manager_FL_MG_JW
                         }
                         if (string.IsNullOrWhiteSpace(kundentyp))
                         {
-                            MessageBox.Show("Bitte Kundentyp wählen!");
+                            MessageBox.Show("Bitte Kundentyp auswählen!", "Fehler!",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error
+                            );
                             return;
                         }
                         string firmenname = txtbCoName.Text;
@@ -226,11 +238,17 @@ namespace Contact_Manager_FL_MG_JW
                         try
                         {
                             command.ExecuteNonQuery();
-                            MessageBox.Show("Daten erfolgreich gespeichert!");
+                            MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information
+                            );
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Fehler: " + ex.Message);
+                            MessageBox.Show("Fehler: " + ex.Message, "Fehler!",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error
+                            );
                         }
                         cmdKunde.ExecuteNonQuery();
                     }
@@ -250,16 +268,16 @@ namespace Contact_Manager_FL_MG_JW
                 connection.Open();
 
                 string createTableSql = @"
-        CREATE TABLE IF NOT EXISTS Global (
-            Anrede TEXT,
-            Titel TEXT,
-            Vorname TEXT,
-            Name TEXT,
-            Geschlecht TEXT,
-            `E-Mail` TEXT,
-            Geburtstag INTEGER,
-            Status TEXT
-        );";
+                       CREATE TABLE IF NOT EXISTS Global (
+                        Anrede TEXT,
+                        Titel TEXT,
+                        Vorname TEXT,
+                        Name TEXT,
+                        Geschlecht TEXT,
+                        `E-Mail` TEXT,
+                        Geburtstag INTEGER,
+                        Status TEXT
+                );";
 
                 var command = new SQLiteCommand(createTableSql, connection);
                 command.ExecuteNonQuery();
