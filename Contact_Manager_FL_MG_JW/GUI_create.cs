@@ -68,7 +68,7 @@ namespace Contact_Manager_FL_MG_JW
             string nachname = txtbLastName.Text;
             string geschlecht = ddlGender.Text;
             string geburtsdatum = dtpBirthday.Text;
-            string mail = txtbEMail.Text;  
+            string mail = txtbEMail.Text;
             string status = ddbStatus.Text;
 
             string dbPfad = Path.Combine(Application.StartupPath, "contactManagerDB.db");
@@ -282,6 +282,16 @@ namespace Contact_Manager_FL_MG_JW
                 var command = new SQLiteCommand(createTableSql, connection);
                 command.ExecuteNonQuery();
             }
+        }
+
+        private void lblEMail_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtbPrAddress_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
