@@ -12,6 +12,7 @@ using System.IO;
 using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Contact_Manager_FL_MG_JW
 {
@@ -22,11 +23,6 @@ namespace Contact_Manager_FL_MG_JW
             InitializeComponent();
             createDBIfNotCreated();
             radioGroupboxHide();
-
-        }
-
-        private void ddlGender_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
         }
 
@@ -147,11 +143,61 @@ namespace Contact_Manager_FL_MG_JW
 
                         try
                         {
-                            command.ExecuteNonQuery();
-                            MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information
-                            );
+                            if (
+                                string.IsNullOrWhiteSpace(anrede) ||
+                                string.IsNullOrWhiteSpace(titel) ||
+                                string.IsNullOrWhiteSpace(vorname) ||
+                                string.IsNullOrWhiteSpace(nachname) ||
+                                string.IsNullOrWhiteSpace(geschlecht) ||
+                                string.IsNullOrWhiteSpace(geburtsdatum) ||
+                                string.IsNullOrWhiteSpace(mail) ||
+                                string.IsNullOrWhiteSpace(status) ||
+                                !ValidateRequiredFields(groupBoxEmployee)
+                                )
+                            {
+                                MessageBox.Show("Bitte alle Pflichtfelder ausfüllen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                            if (!ChbTrainee.Checked)
+                            {
+                                command.ExecuteNonQuery();
+                                cmdMitarbeiter.ExecuteNonQuery();
+                                MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information
+                                );
+                            }
+                            else
+                            {
+                                long mitarbeiterId = connection.LastInsertRowId;
+
+                                if (ChbTrainee.Checked)
+                                {
+                                    if (!ValidateRequiredFields(groupBoxTrainee))
+                                    {
+                                        MessageBox.Show("Bitte alle Pflichtfelder für Lernende ausfüllen!");
+                                        return;
+                                    }
+                                    string lehrjahre = txtbNrOfYearsOfAppr.Text;
+                                    string aktuelleslehrjahr = txtbWhYearsOfAppr.Text;
+                                    string insertLernender = @"
+                                                            INSERT INTO Lernender
+                                                            (lehrjahre, aktuelleslehrjahr, mitarbeiterid)
+                                                            VALUES
+                                                            (@lehrjahre, @aktuelleslehrjahr, @mitarbeiterid);";
+                                    var cmdLernender = new SQLiteCommand(insertLernender, connection);
+                                    cmdLernender.Parameters.AddWithValue("@lehrjahre", lehrjahre);
+                                    cmdLernender.Parameters.AddWithValue("@aktuelleslehrjahr", aktuelleslehrjahr);
+                                    cmdLernender.Parameters.AddWithValue("@mitarbeiterid", mitarbeiterId);
+                                    command.ExecuteNonQuery();
+                                    cmdMitarbeiter.ExecuteNonQuery();
+                                    cmdLernender.ExecuteNonQuery();
+                                    MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information
+                                    );
+                                }
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -161,25 +207,7 @@ namespace Contact_Manager_FL_MG_JW
                             );
                         }
 
-                        cmdMitarbeiter.ExecuteNonQuery();
-
-                        long mitarbeiterId = connection.LastInsertRowId;
-
-                        if (ChbTrainee.Checked)
-                        {
-                            string lehrjahre = txtbNrOfYearsOfAppr.Text;
-                            string aktuelleslehrjahr = txtbWhYearsOfAppr.Text;
-                            string insertLernender = @"
-                            INSERT INTO Lernender
-                            (lehrjahre, aktuelleslehrjahr, mitarbeiterid)
-                            VALUES
-                            (@lehrjahre, @aktuelleslehrjahr, @mitarbeiterid);";
-                            var cmdLernender = new SQLiteCommand(insertLernender, connection);
-                            cmdLernender.Parameters.AddWithValue("@lehrjahre", lehrjahre);
-                            cmdLernender.Parameters.AddWithValue("@aktuelleslehrjahr", aktuelleslehrjahr);
-                            cmdLernender.Parameters.AddWithValue("@mitarbeiterid", mitarbeiterId);
-                            cmdLernender.ExecuteNonQuery();
-                        }
+                        
 
 
                     }
@@ -237,6 +265,18 @@ namespace Contact_Manager_FL_MG_JW
                         cmdKunde.Parameters.AddWithValue("@globalid", globalId);
                         try
                         {
+                            if (string.IsNullOrWhiteSpace(anrede) ||
+    string.IsNullOrWhiteSpace(titel) ||
+    string.IsNullOrWhiteSpace(vorname) ||
+    string.IsNullOrWhiteSpace(nachname) ||
+    string.IsNullOrWhiteSpace(geschlecht) ||
+    string.IsNullOrWhiteSpace(geburtsdatum) ||
+    string.IsNullOrWhiteSpace(mail) ||
+    string.IsNullOrWhiteSpace(status))
+                            {
+                                MessageBox.Show("Bitte alle Pflichtfelder im oberen Bereich ausfüllen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
                             command.ExecuteNonQuery();
                             MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
                                 MessageBoxButtons.OK,
@@ -249,6 +289,11 @@ namespace Contact_Manager_FL_MG_JW
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error
                             );
+                        }
+                        if (!ValidateRequiredFields(groupBoxCustomer))
+                        {
+                            MessageBox.Show("Bitte alle Pflichtfelder für Kunden ausfüllen!");
+                            return;
                         }
                         cmdKunde.ExecuteNonQuery();
                     }
@@ -283,15 +328,99 @@ namespace Contact_Manager_FL_MG_JW
                 command.ExecuteNonQuery();
             }
         }
+        private bool ValidateRequiredFields(Control parent)
+        {
+            bool allValid = true;
 
-        private void lblEMail_Click(object sender, EventArgs e)
+            foreach (Control control in parent.Controls)
+            {
+
+                //Lehrlingsfelder nur prüfen wenn checked
+                if (!ChbTrainee.Checked && (control.Name == "txtbNrOfYearsOfAppr" || control.Name == "txtbWhYearsOfAppr"))
+                {
+                    continue;
+                }
+                // Rekursiv prüfen (z. B. für GroupBoxen)
+                if (control.HasChildren)
+                {
+                    if (!ValidateRequiredFields(control))
+                        allValid = false;
+                    continue;
+                }
+                //Mitarbeiternummer ignorieren
+                if (control.Name == "lblEmpNrOut")
+                {
+                    continue;
+                }
+
+                // RadioButtons ignorieren
+                if (control is RadioButton)
+                {
+                    continue;
+                }
+
+
+                // TextBox prüfen
+                if (control is System.Windows.Forms.TextBox tb)
+                {
+                    if (string.IsNullOrWhiteSpace(tb.Text))
+                    {
+                        tb.BackColor = Color.MistyRose;
+                        allValid = false;
+                    }
+                    else
+                    {
+                        tb.BackColor = Color.White;
+                    }
+                }
+
+                // ComboBox prüfen
+                else if (control is System.Windows.Forms.ComboBox cb)
+                {
+                    if (string.IsNullOrWhiteSpace(cb.Text))
+                    {
+                        cb.BackColor = Color.MistyRose;
+                        allValid = false;
+                    }
+                    else
+                    {
+                        cb.BackColor = Color.White;
+                    }
+                }
+
+                // DateTimePicker prüfen
+                else if (control is DateTimePicker dtp)
+                {
+                    if (dtp.Value == DateTimePicker.MinimumDateTime)
+                    {
+                        dtp.CalendarTitleBackColor = Color.MistyRose; // nicht ideal sichtbar
+                        allValid = false;
+                    }
+                }
+
+                // NumericUpDown prüfen
+                else if (control is NumericUpDown nud)
+                {
+                    if (nud.Value <= 0)
+                    {
+                        nud.BackColor = Color.MistyRose;
+                        allValid = false;
+                    }
+                    else
+                    {
+                        nud.BackColor = Color.White;
+                    }
+                }
+            }
+
+            return allValid;
+        }
+
+        private void validateGlobalFields()
         {
 
         }
 
-        private void txtbPrAddress_TextChanged(object sender, EventArgs e)
-        {
 
-        }
     }
 }

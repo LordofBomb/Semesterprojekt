@@ -163,7 +163,6 @@
             ddlGender.Name = "ddlGender";
             ddlGender.Size = new Size(200, 23);
             ddlGender.TabIndex = 140;
-            ddlGender.SelectedIndexChanged += ddlGender_SelectedIndexChanged;
             // 
             // lblGender
             // 
@@ -225,7 +224,6 @@
             lblEMail.Size = new Size(44, 15);
             lblEMail.TabIndex = 14;
             lblEMail.Text = "E-Mail:";
-            lblEMail.Click += lblEMail_Click;
             // 
             // ddbStatus
             // 
@@ -380,7 +378,6 @@
             txtbPrAddress.Name = "txtbPrAddress";
             txtbPrAddress.Size = new Size(200, 23);
             txtbPrAddress.TabIndex = 250;
-            txtbPrAddress.TextChanged += txtbPrAddress_TextChanged;
             // 
             // lblPrAddress
             // 
@@ -786,7 +783,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(868, 911);
-            Controls.Add(groupBoxEmployee);
+            Controls.Add(groupBoxCustomer);
             Controls.Add(BtnSave);
             Controls.Add(rbttEmployee);
             Controls.Add(rbttCustomer);
@@ -806,7 +803,7 @@
             Controls.Add(txtbFirstName);
             Controls.Add(lblTitel);
             Controls.Add(txtbTitel);
-            Controls.Add(groupBoxCustomer);
+            Controls.Add(groupBoxEmployee);
             Name = "GUI_Create";
             Text = "Kontakt erstellen";
             ((System.ComponentModel.ISupportInitialize)nudEmpLevel).EndInit();
