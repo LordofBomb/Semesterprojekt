@@ -30,6 +30,7 @@
         {
             bttmCreateOnDash = new Button();
             lblTitel = new Label();
+            BtnResetDB = new Button();
             SuspendLayout();
             // 
             // bttmCreateOnDash
@@ -51,11 +52,22 @@
             lblTitel.TabIndex = 1;
             lblTitel.Text = "Contact Manager";
             // 
+            // BtnResetDB
+            // 
+            BtnResetDB.Location = new Point(305, 294);
+            BtnResetDB.Name = "BtnResetDB";
+            BtnResetDB.Size = new Size(172, 59);
+            BtnResetDB.TabIndex = 2;
+            BtnResetDB.Text = "Datenbank zurücksetzten";
+            BtnResetDB.UseVisualStyleBackColor = true;
+            BtnResetDB.Click += BtnResetDB_Click;
+            // 
             // GUI_Dashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(BtnResetDB);
             Controls.Add(lblTitel);
             Controls.Add(bttmCreateOnDash);
             Name = "GUI_Dashboard";
@@ -68,5 +80,6 @@
 
         private Button bttmCreateOnDash;
         private Label lblTitel;
+        private Button BtnResetDB;
     }
 }

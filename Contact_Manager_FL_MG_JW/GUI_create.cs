@@ -22,7 +22,6 @@ namespace Contact_Manager_FL_MG_JW
         public GUI_Create()
         {
             InitializeComponent();
-            createDBIfNotCreated.CreateDB();
             radioGroupboxHide();
         }
 
