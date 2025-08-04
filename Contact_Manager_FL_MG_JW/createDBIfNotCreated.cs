@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Contact_Manager_FL_MG_JW
 {
-    internal class createDBIfNotCreated()
+    internal class createDBIfNotCreated
     {
         public static void CreateDB()
         {

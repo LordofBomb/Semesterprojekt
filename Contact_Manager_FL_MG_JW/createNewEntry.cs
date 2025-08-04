@@ -223,7 +223,7 @@ namespace Contact_Manager_FL_MG_JW
                         try
                         {
                             if (string.IsNullOrWhiteSpace(anrede) ||
-                                string.IsNullOrWhiteSpace(titel) ||
+                                //string.IsNullOrWhiteSpace(titel) ||
                                 string.IsNullOrWhiteSpace(vorname) ||
                                 string.IsNullOrWhiteSpace(nachname) ||
                                 string.IsNullOrWhiteSpace(geschlecht) ||
