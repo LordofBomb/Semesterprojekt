@@ -18,12 +18,19 @@ namespace Contact_Manager_FL_MG_JW
             createForm.Show(); // Fenster anzeigen (nicht modal)
         }
 
+        private void BtnViewAll_Click(object sender, EventArgs e)
+        {
+            var viewForm = new GUI_ViewAll();
+            viewForm.Show();
+        }
+
+
         private void BtnResetDB_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Willst du die Datenbank wirklich zurücksetzten? Alle bisher gespeicherten Daten gehen unwiderruflich verloren!", "Warnung", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
-            {s
+            {
                 using (var connection = new SQLiteConnection("Data Source=contactManagerDB.db;Version=3;"))
                 {
                     connection.Open();

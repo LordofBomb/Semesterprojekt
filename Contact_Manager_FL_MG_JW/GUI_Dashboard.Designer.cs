@@ -20,6 +20,7 @@
             base.Dispose(disposing);
         }
 
+
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -54,13 +55,25 @@
             // 
             // BtnResetDB
             // 
-            BtnResetDB.Location = new Point(305, 294);
+            BtnResetDB.Location = new Point(305, 359);
             BtnResetDB.Name = "BtnResetDB";
             BtnResetDB.Size = new Size(172, 59);
             BtnResetDB.TabIndex = 2;
             BtnResetDB.Text = "Datenbank zurücksetzten";
             BtnResetDB.UseVisualStyleBackColor = true;
             BtnResetDB.Click += BtnResetDB_Click;
+            //
+            // BtnViewAll
+            //
+            BtnViewAll = new Button();
+            BtnViewAll.Location = new Point(305, 294); 
+            BtnViewAll.Name = "BtnViewAll";
+            BtnViewAll.Size = new Size(172, 59);
+            BtnViewAll.TabIndex = 3;
+            BtnViewAll.Text = "Alle Kontakte anzeigen";
+            BtnViewAll.UseVisualStyleBackColor = true;
+            BtnViewAll.Click += new EventHandler(this.BtnViewAll_Click);
+            Controls.Add(this.BtnViewAll);
             // 
             // GUI_Dashboard
             // 
@@ -81,5 +94,6 @@
         private Button bttmCreateOnDash;
         private Label lblTitel;
         private Button BtnResetDB;
+        private Button BtnViewAll;
     }
 }

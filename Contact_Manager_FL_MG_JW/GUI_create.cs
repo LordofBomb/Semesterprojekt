@@ -57,8 +57,61 @@ namespace Contact_Manager_FL_MG_JW
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            var creator = new createNewEntry(this);
-            creator.CreatePerson(sender, e);
+            if (this.Tag != null)
+            {
+                // Bestehenden Datensatz aktualisieren
+                string id = this.Tag.ToString();
+                UpdateExistingEntry(id);
+            }
+            else
+            {
+                // Neuen Datensatz erstellen
+                var creator = new createNewEntry(this);
+                creator.CreatePerson(sender, e);
+            }
+        }
+
+        private void UpdateExistingEntry(string id)
+        {
+            string dbPfad = Path.Combine(Application.StartupPath, "contactManagerDB.db");
+            using (var connection = new SQLiteConnection($"Data Source={dbPfad};Version=3;"))
+            {
+                connection.Open();
+                string sql = @"
+                    UPDATE Global SET
+                        Anrede = @Anrede,
+                        Titel = @Titel,
+                        Vorname = @Vorname,
+                        Name = @Name,
+                        Geschlecht = @Geschlecht,
+                        `E-Mail` = @Email,
+                        Geburtstag = @Geburtstag,
+                        Status = @Status
+                    WHERE globalid = @Id";
+
+                using (var command = new SQLiteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@Anrede", ddlSalutation.Text);
+                    command.Parameters.AddWithValue("@Titel", txtbTitel.Text);
+                    command.Parameters.AddWithValue("@Vorname", txtbFirstName.Text);
+                    command.Parameters.AddWithValue("@Name", txtbLastName.Text);
+                    command.Parameters.AddWithValue("@Geschlecht", ddlGender.Text);
+                    command.Parameters.AddWithValue("@Email", txtbEMail.Text);
+                    command.Parameters.AddWithValue("@Geburtstag", dtpBirthday.Value.Date.Ticks);
+                    command.Parameters.AddWithValue("@Status", ddbStatus.Text);
+                    command.Parameters.AddWithValue("@Id", id);
+
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                        MessageBox.Show("Kontakt erfolgreich aktualisiert.", "Erfolg", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Fehler beim Aktualisieren: " + ex.Message, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
     }
 }
