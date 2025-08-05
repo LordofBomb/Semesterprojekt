@@ -10,18 +10,18 @@ namespace Contact_Manager_FL_MG_JW
         {
             InitializeComponent();
             createDBIfNotCreated.CreateDB();
+
+
+            viewAllPanel = new Form_ViewAll();
+            viewAllPanel.Location = new Point(20, 500); // oder passend zu deinem Layout
+            viewAllPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            Controls.Add(viewAllPanel);
         }
 
         private void bttmCreateOnDash_Click(object sender, EventArgs e)
         {
             GUI_Create createForm = new GUI_Create(); // Neues Fenster erzeugen
             createForm.Show(); // Fenster anzeigen (nicht modal)
-        }
-
-        private void BtnViewAll_Click(object sender, EventArgs e)
-        {
-            var viewForm = new GUI_ViewAll();
-            viewForm.Show();
         }
 
 

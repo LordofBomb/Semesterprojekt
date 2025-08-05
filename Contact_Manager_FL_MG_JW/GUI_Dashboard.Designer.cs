@@ -6,6 +6,7 @@
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private Form_ViewAll viewAllPanel;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -62,18 +63,6 @@
             BtnResetDB.Text = "Datenbank zurücksetzten";
             BtnResetDB.UseVisualStyleBackColor = true;
             BtnResetDB.Click += BtnResetDB_Click;
-            //
-            // BtnViewAll
-            //
-            BtnViewAll = new Button();
-            BtnViewAll.Location = new Point(305, 294); 
-            BtnViewAll.Name = "BtnViewAll";
-            BtnViewAll.Size = new Size(172, 59);
-            BtnViewAll.TabIndex = 3;
-            BtnViewAll.Text = "Alle Kontakte anzeigen";
-            BtnViewAll.UseVisualStyleBackColor = true;
-            BtnViewAll.Click += new EventHandler(this.BtnViewAll_Click);
-            Controls.Add(this.BtnViewAll);
             // 
             // GUI_Dashboard
             // 
@@ -94,6 +83,5 @@
         private Button bttmCreateOnDash;
         private Label lblTitel;
         private Button BtnResetDB;
-        private Button BtnViewAll;
     }
 }
