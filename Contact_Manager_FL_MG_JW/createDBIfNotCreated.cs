@@ -33,7 +33,7 @@ namespace Contact_Manager_FL_MG_JW
                     Name TEXT,
                     Geschlecht TEXT,
                     `E-Mail` TEXT,
-                    Geburtstag INTEGER,
+                    Geburtstag TEXT,
                     Status TEXT,
                     globalid INTEGER PRIMARY KEY AUTOINCREMENT
                     );";
@@ -45,7 +45,8 @@ namespace Contact_Manager_FL_MG_JW
                     firmenname TEXT,
                     geschäftsadresse TEXT,
                     geschäftsnummer TEXT,
-                    adresse TEXT,
+                    strasse TEXT,
+                    PLZOrt TEXT,
                     telefon TEXT,
                     globalid INTEGER
                     );";
@@ -55,14 +56,14 @@ namespace Contact_Manager_FL_MG_JW
                     CREATE TABLE IF NOT EXISTS Mitarbeiter (
                     mitarbeiternummer INTEGER PRIMARY KEY AUTOINCREMENT,
                     eintrittsdatum TEXT,
-                    adresse TEXT,
+                    strasse TEXT,
+                    PLZOrt TEXT,
                     handynummer TEXT,
                     beschäftigungsgrad INTEGER,
                     abteilung TEXT,
                     kaderstufe INTEGER,
                     ahvnummer TEXT,
                     austrittsdatum TEXT,
-                    wohnort TEXT,
                     nationalität TEXT,
                     standort TEXT,
                     tätigkeitsbezeichnung TEXT,

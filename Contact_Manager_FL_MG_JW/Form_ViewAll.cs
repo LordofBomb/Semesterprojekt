@@ -56,7 +56,7 @@ namespace Contact_Manager_FL_MG_JW
             using (var connection = new SQLiteConnection($"Data Source={dbPfad};Version=3;"))
             {
                 connection.Open();
-                string sql = "SELECT globalid, Anrede, Titel, Vorname, Name, Geschlecht, `E-Mail`, Geburtstag, Status FROM Global";
+                string sql = "SELECT globalid, Anrede, Titel, Vorname, Name, Geschlecht, `E-Mail`, CAST(Geburtstag AS TEXT) AS Geburtstag, Status FROM Global";
 
                 if (!string.IsNullOrWhiteSpace(filter))
                     sql += " WHERE Vorname LIKE @filter OR Name LIKE @filter OR `E-Mail` LIKE @filter";
@@ -94,7 +94,10 @@ namespace Contact_Manager_FL_MG_JW
                 bearbeitenFormular.txtbTitel.Text = row.Cells["Titel"].Value?.ToString();
                 bearbeitenFormular.ddlGender.Text = row.Cells["Geschlecht"].Value?.ToString();
                 bearbeitenFormular.txtbEMail.Text = row.Cells["E-Mail"].Value?.ToString();
-                bearbeitenFormular.dtpBirthday.Text = row.Cells["Geburtstag"].Value?.ToString();
+                if (row.Cells["Geburtstag"].Value != null) 
+                { 
+                    bearbeitenFormular.dtpBirthday.Value = DateTime.Parse(row.Cells["Geburtstag"].Value.ToString()!); 
+                }
                 bearbeitenFormular.ddbStatus.Text = row.Cells["Status"].Value?.ToString();
                 bearbeitenFormular.Tag = row.Cells["globalid"].Value?.ToString();
 

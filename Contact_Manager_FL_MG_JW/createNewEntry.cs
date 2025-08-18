@@ -17,6 +17,8 @@ namespace Contact_Manager_FL_MG_JW
             gui = guiForm;
         }
 
+        private static DateTime? GetNullable(DateTimePicker dp) => dp.Checked ? dp.Value.Date : (DateTime?)null;
+
         internal void CreatePerson(object sender, EventArgs e) 
         {
             // -------------------------- Abschnitt Global --------------------------
@@ -26,7 +28,7 @@ namespace Contact_Manager_FL_MG_JW
             string vorname = gui.txtbFirstName.Text;
             string nachname = gui.txtbLastName.Text;
             string geschlecht = gui.ddlGender.Text;
-            string geburtsdatum = gui.dtpBirthday.Text;
+            string geburtsdatum = gui.dtpBirthday.Value.ToString("O");
             string mail = gui.txtbEMail.Text;
             string status = gui.ddbStatus.Text;
 
@@ -67,34 +69,34 @@ namespace Contact_Manager_FL_MG_JW
                     {
                         string eintrittsdatum = gui.dtphiringdate.Value.ToString("yyyy-MM-dd");
                         string austrittsdatum = gui.dtpExitDate.Value.ToString("yyyy-MM-dd");
-                        string adresse = gui.txtbEmpAddress.Text;
+                        string strasse = gui.txtbEmpStreet.Text;
+                        string PLZOrt = gui.txtbEmpPlz.Text;
                         string handynummer = gui.txtbMoPhone.Text;
                         string beschaeftigungsgrad = gui.nudEmpLevel.Text;
                         string abteilung = gui.ddbDepartment.Text;
                         int kaderstufe = 0;
                         int.TryParse(gui.ddbCadreLvl.Text, out kaderstufe);
                         string ahvnummer = gui.txtbAHVNr.Text;
-                        string wohnort = gui.txtbEmpResi.Text;
                         string nationalitaet = gui.txtbNationality.Text;
                         string standort = gui.ddbLoAddress.Text;
                         string taetigkeit = gui.txtbRole.Text;
                         string telefonintern = gui.txtbIntPhNr.Text;
                         string insertMitarbeiter = @"
                             INSERT INTO Mitarbeiter 
-                            (eintrittsdatum, adresse, handynummer, beschäftigungsgrad, abteilung, kaderstufe, ahvnummer, austrittsdatum, wohnort, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid)
+                            (eintrittsdatum, strasse, PLZOrt, handynummer, beschäftigungsgrad, abteilung, kaderstufe, ahvnummer, austrittsdatum, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid)
                             VALUES 
-                            (@eintritt, @adresse, @handy, @grad, @abteilung, @kader, @ahv, @austritt, @ort, @nationalitaet, @standort, @tätigkeitsbezeichnung, @telefon, @globalid);";
+                            (@eintritt, @strasse, @PLZOrt, @handy, @grad, @abteilung, @kader, @ahv, @austritt, @nationalitaet, @standort, @tätigkeitsbezeichnung, @telefon, @globalid);";
                     
                         var cmdMitarbeiter = new SQLiteCommand(insertMitarbeiter, connection);
                         cmdMitarbeiter.Parameters.AddWithValue("@eintritt", eintrittsdatum);
-                        cmdMitarbeiter.Parameters.AddWithValue("@adresse", adresse);
+                        cmdMitarbeiter.Parameters.AddWithValue("@strasse", strasse); 
+                        cmdMitarbeiter.Parameters.AddWithValue("@PLZOrt", PLZOrt);
                         cmdMitarbeiter.Parameters.AddWithValue("@handy", handynummer);
                         cmdMitarbeiter.Parameters.AddWithValue("@grad", beschaeftigungsgrad);
                         cmdMitarbeiter.Parameters.AddWithValue("@abteilung", abteilung);
                         cmdMitarbeiter.Parameters.AddWithValue("@kader", kaderstufe);
                         cmdMitarbeiter.Parameters.AddWithValue("@ahv", ahvnummer);
                         cmdMitarbeiter.Parameters.AddWithValue("@austritt", austrittsdatum);
-                        cmdMitarbeiter.Parameters.AddWithValue("@ort", wohnort);
                         cmdMitarbeiter.Parameters.AddWithValue("@nationalitaet", nationalitaet);
                         cmdMitarbeiter.Parameters.AddWithValue("@standort", standort);
                         cmdMitarbeiter.Parameters.AddWithValue("@tätigkeitsbezeichnung", taetigkeit);
@@ -203,7 +205,7 @@ namespace Contact_Manager_FL_MG_JW
                         string firmenname = gui.txtbCoName.Text;
                         string geschaeftsadresse = gui.txtbCoAddresse.Text;
                         string geschaeftsnummer = gui.txtbCoPhoneNr.Text;
-                        string adresse = gui.txtbPrAddress.Text;
+                        string adresse = gui.txtbPrStreet.Text;
                         string telefon = gui.txtbPrPhone.Text;
                     
                         string insertKunde = @"
