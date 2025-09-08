@@ -35,6 +35,7 @@ namespace Contact_Manager_FL_MG_JW
                     `E-Mail` TEXT,
                     Geburtstag TEXT,
                     Status TEXT,
+                    Accounttyp TEXT,
                     globalid INTEGER PRIMARY KEY AUTOINCREMENT
                     );";
 
@@ -46,9 +47,11 @@ namespace Contact_Manager_FL_MG_JW
                     geschäftsadresse TEXT,
                     geschäftsnummer TEXT,
                     strasse TEXT,
-                    PLZOrt TEXT,
+                    PLZ TEXT,
+                    Ort TEXT,
                     telefon TEXT,
-                    globalid INTEGER
+                    globalid INTEGER,
+                    FOREIGN KEY(globalid) REFERENCES Global(globalid) ON DELETE CASCADE
                     );";
 
                     // Mitarbeiter
@@ -57,7 +60,8 @@ namespace Contact_Manager_FL_MG_JW
                     mitarbeiternummer INTEGER PRIMARY KEY AUTOINCREMENT,
                     eintrittsdatum TEXT,
                     strasse TEXT,
-                    PLZOrt TEXT,
+                    PLZ TEXT,
+                    Ort TEXT,
                     handynummer TEXT,
                     beschäftigungsgrad INTEGER,
                     abteilung TEXT,

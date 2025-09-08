@@ -92,14 +92,18 @@
             txtbWhYearsOfAppr = new TextBox();
             lblWhYearsOfAppr = new Label();
             groupBoxCustomer = new GroupBox();
+            TxtbCoPlace = new TextBox();
+            LblCoPlace = new Label();
             txtprplz = new TextBox();
             label2 = new Label();
             groupBoxEmployee = new GroupBox();
+            LblEmpPlace = new Label();
+            txtbEmpPlace = new TextBox();
+            LblEmpPlz = new Label();
+            txtbEmpPlz = new TextBox();
             label1 = new Label();
             groupBoxTrainee = new GroupBox();
             BtnSave = new Button();
-            txtbEmpPlz = new TextBox();
-            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)nudEmpLevel).BeginInit();
             groupBoxCustomer.SuspendLayout();
             groupBoxEmployee.SuspendLayout();
@@ -391,7 +395,7 @@
             // 
             // txtbPrPhone
             // 
-            txtbPrPhone.Location = new Point(130, 130);
+            txtbPrPhone.Location = new Point(130, 162);
             txtbPrPhone.Name = "txtbPrPhone";
             txtbPrPhone.Size = new Size(200, 23);
             txtbPrPhone.TabIndex = 260;
@@ -399,7 +403,7 @@
             // lblPrPhone
             // 
             lblPrPhone.AutoSize = true;
-            lblPrPhone.Location = new Point(13, 126);
+            lblPrPhone.Location = new Point(13, 167);
             lblPrPhone.Name = "lblPrPhone";
             lblPrPhone.Size = new Size(111, 15);
             lblPrPhone.TabIndex = 33;
@@ -491,7 +495,7 @@
             // 
             // txtbMoPhone
             // 
-            txtbMoPhone.Location = new Point(169, 136);
+            txtbMoPhone.Location = new Point(168, 184);
             txtbMoPhone.Name = "txtbMoPhone";
             txtbMoPhone.Size = new Size(200, 23);
             txtbMoPhone.TabIndex = 220;
@@ -499,7 +503,7 @@
             // lblMoPhone
             // 
             lblMoPhone.AutoSize = true;
-            lblMoPhone.Location = new Point(72, 139);
+            lblMoPhone.Location = new Point(71, 187);
             lblMoPhone.Name = "lblMoPhone";
             lblMoPhone.Size = new Size(91, 15);
             lblMoPhone.TabIndex = 47;
@@ -507,7 +511,7 @@
             // 
             // txtbNationality
             // 
-            txtbNationality.Location = new Point(169, 170);
+            txtbNationality.Location = new Point(168, 218);
             txtbNationality.Name = "txtbNationality";
             txtbNationality.Size = new Size(200, 23);
             txtbNationality.TabIndex = 240;
@@ -515,7 +519,7 @@
             // lblNationality
             // 
             lblNationality.AutoSize = true;
-            lblNationality.Location = new Point(90, 171);
+            lblNationality.Location = new Point(89, 219);
             lblNationality.Name = "lblNationality";
             lblNationality.Size = new Size(72, 15);
             lblNationality.TabIndex = 49;
@@ -613,7 +617,7 @@
             // 
             // txtbIntPhNr
             // 
-            txtbIntPhNr.Location = new Point(168, 207);
+            txtbIntPhNr.Location = new Point(548, 77);
             txtbIntPhNr.Name = "txtbIntPhNr";
             txtbIntPhNr.Size = new Size(200, 23);
             txtbIntPhNr.TabIndex = 250;
@@ -621,7 +625,7 @@
             // lblIntPhNr
             // 
             lblIntPhNr.AutoSize = true;
-            lblIntPhNr.Location = new Point(34, 210);
+            lblIntPhNr.Location = new Point(414, 80);
             lblIntPhNr.Name = "lblIntPhNr";
             lblIntPhNr.Size = new Size(129, 15);
             lblIntPhNr.TabIndex = 63;
@@ -672,6 +676,8 @@
             // 
             // groupBoxCustomer
             // 
+            groupBoxCustomer.Controls.Add(TxtbCoPlace);
+            groupBoxCustomer.Controls.Add(LblCoPlace);
             groupBoxCustomer.Controls.Add(txtprplz);
             groupBoxCustomer.Controls.Add(label2);
             groupBoxCustomer.Controls.Add(lblCoName);
@@ -691,9 +697,25 @@
             groupBoxCustomer.Controls.Add(lblPrPhone);
             groupBoxCustomer.Location = new Point(33, 331);
             groupBoxCustomer.Name = "groupBoxCustomer";
-            groupBoxCustomer.Size = new Size(749, 165);
+            groupBoxCustomer.Size = new Size(749, 219);
             groupBoxCustomer.TabIndex = 69;
             groupBoxCustomer.TabStop = false;
+            // 
+            // TxtbCoPlace
+            // 
+            TxtbCoPlace.Location = new Point(130, 130);
+            TxtbCoPlace.Name = "TxtbCoPlace";
+            TxtbCoPlace.Size = new Size(200, 23);
+            TxtbCoPlace.TabIndex = 294;
+            // 
+            // LblCoPlace
+            // 
+            LblCoPlace.AutoSize = true;
+            LblCoPlace.Location = new Point(97, 130);
+            LblCoPlace.Name = "LblCoPlace";
+            LblCoPlace.Size = new Size(27, 15);
+            LblCoPlace.TabIndex = 293;
+            LblCoPlace.Text = "Ort:";
             // 
             // txtprplz
             // 
@@ -705,15 +727,17 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(50, 104);
+            label2.Location = new Point(94, 101);
             label2.Name = "label2";
-            label2.Size = new Size(74, 15);
+            label2.Size = new Size(30, 15);
             label2.TabIndex = 291;
-            label2.Text = "PLZ und Ort:";
+            label2.Text = "PLZ:";
             // 
             // groupBoxEmployee
             // 
-            groupBoxEmployee.Controls.Add(label3);
+            groupBoxEmployee.Controls.Add(LblEmpPlace);
+            groupBoxEmployee.Controls.Add(txtbEmpPlace);
+            groupBoxEmployee.Controls.Add(LblEmpPlz);
             groupBoxEmployee.Controls.Add(txtbEmpPlz);
             groupBoxEmployee.Controls.Add(label1);
             groupBoxEmployee.Controls.Add(groupBoxTrainee);
@@ -750,6 +774,39 @@
             groupBoxEmployee.TabIndex = 70;
             groupBoxEmployee.TabStop = false;
             // 
+            // LblEmpPlace
+            // 
+            LblEmpPlace.AutoSize = true;
+            LblEmpPlace.Location = new Point(130, 144);
+            LblEmpPlace.Name = "LblEmpPlace";
+            LblEmpPlace.Size = new Size(27, 15);
+            LblEmpPlace.TabIndex = 334;
+            LblEmpPlace.Text = "Ort:";
+            LblEmpPlace.Click += LblEmpPlace_Click;
+            // 
+            // txtbEmpPlace
+            // 
+            txtbEmpPlace.Location = new Point(168, 141);
+            txtbEmpPlace.Name = "txtbEmpPlace";
+            txtbEmpPlace.Size = new Size(200, 23);
+            txtbEmpPlace.TabIndex = 333;
+            // 
+            // LblEmpPlz
+            // 
+            LblEmpPlz.AutoSize = true;
+            LblEmpPlz.Location = new Point(83, 112);
+            LblEmpPlz.Name = "LblEmpPlz";
+            LblEmpPlz.Size = new Size(30, 15);
+            LblEmpPlz.TabIndex = 332;
+            LblEmpPlz.Text = "PLZ:";
+            // 
+            // txtbEmpPlz
+            // 
+            txtbEmpPlz.Location = new Point(168, 109);
+            txtbEmpPlz.Name = "txtbEmpPlz";
+            txtbEmpPlz.Size = new Size(200, 23);
+            txtbEmpPlz.TabIndex = 331;
+            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -780,22 +837,6 @@
             BtnSave.Text = "Eintrag speichern";
             BtnSave.UseVisualStyleBackColor = true;
             BtnSave.Click += BtnSave_Click;
-            // 
-            // txtbEmpPlz
-            // 
-            txtbEmpPlz.Location = new Point(168, 109);
-            txtbEmpPlz.Name = "txtbEmpPlz";
-            txtbEmpPlz.Size = new Size(200, 23);
-            txtbEmpPlz.TabIndex = 331;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(83, 112);
-            label3.Name = "label3";
-            label3.Size = new Size(74, 15);
-            label3.TabIndex = 332;
-            label3.Text = "PLZ und Ort:";
             // 
             // GUI_Create
             // 
@@ -909,7 +950,11 @@
         internal Label label1;
         internal TextBox txtprplz;
         internal Label label2;
-        internal Label label3;
+        internal Label LblEmpPlz;
         internal TextBox txtbEmpPlz;
+        internal Label LblEmpPlace;
+        internal TextBox txtbEmpPlace;
+        internal TextBox TxtbCoPlace;
+        internal Label LblCoPlace;
     }
 }

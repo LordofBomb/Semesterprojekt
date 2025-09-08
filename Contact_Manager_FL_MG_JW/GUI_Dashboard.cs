@@ -17,7 +17,7 @@ namespace Contact_Manager_FL_MG_JW
             viewAllPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             Controls.Add(viewAllPanel);
         }
-
+        
         private void bttmCreateOnDash_Click(object sender, EventArgs e)
         {
             GUI_Create createForm = new GUI_Create(); // Neues Fenster erzeugen

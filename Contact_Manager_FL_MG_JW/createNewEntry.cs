@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -31,6 +32,15 @@ namespace Contact_Manager_FL_MG_JW
             string geburtsdatum = gui.dtpBirthday.Value.ToString("O");
             string mail = gui.txtbEMail.Text;
             string status = gui.ddbStatus.Text;
+            string acctype = "";
+            if (gui.rbttEmployee.Checked == true) 
+            {
+                acctype = "Mitarbeiter";
+            }
+            else
+            {
+                acctype = "Kunde";
+            }
 
             string dbPfad = Path.Combine(Application.StartupPath, "contactManagerDB.db");
 
@@ -40,9 +50,9 @@ namespace Contact_Manager_FL_MG_JW
 
                 string sql = @"
                             INSERT INTO Global 
-                            (Anrede, Titel, Vorname, Name, Geschlecht, Geburtstag, `E-Mail`, Status) 
+                            (Anrede, Titel, Vorname, Name, Geschlecht, Geburtstag, `E-Mail`, Status, Accounttyp) 
                             VALUES 
-                            (@anrede, @titel, @vorname, @nachname, @geschlecht, @geburtsdatum, @mail, @status)";
+                            (@anrede, @titel, @vorname, @nachname, @geschlecht, @geburtsdatum, @mail, @status, @Accounttyp)";
 
                 using (var command = new SQLiteCommand(sql, connection))
                 {
@@ -54,6 +64,7 @@ namespace Contact_Manager_FL_MG_JW
                     command.Parameters.AddWithValue("@geburtsdatum", geburtsdatum);
                     command.Parameters.AddWithValue("@mail", mail);
                     command.Parameters.AddWithValue("@status", status);
+                    command.Parameters.AddWithValue("@Accounttyp", acctype);
 
                     if (!gui.rbttCustomer.Checked && !gui.rbttEmployee.Checked)
                     {
@@ -61,7 +72,7 @@ namespace Contact_Manager_FL_MG_JW
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                     }
-
+                    command.ExecuteNonQuery();
                     long globalId = connection.LastInsertRowId;
 
                     // -------------------------- Abschnitt Mitarbeiter --------------------------
@@ -70,7 +81,8 @@ namespace Contact_Manager_FL_MG_JW
                         string eintrittsdatum = gui.dtphiringdate.Value.ToString("yyyy-MM-dd");
                         string austrittsdatum = gui.dtpExitDate.Value.ToString("yyyy-MM-dd");
                         string strasse = gui.txtbEmpStreet.Text;
-                        string PLZOrt = gui.txtbEmpPlz.Text;
+                        string PLZ = gui.txtbEmpPlz.Text;
+                        string Ort = gui.txtbEmpPlace.Text;
                         string handynummer = gui.txtbMoPhone.Text;
                         string beschaeftigungsgrad = gui.nudEmpLevel.Text;
                         string abteilung = gui.ddbDepartment.Text;
@@ -83,14 +95,15 @@ namespace Contact_Manager_FL_MG_JW
                         string telefonintern = gui.txtbIntPhNr.Text;
                         string insertMitarbeiter = @"
                             INSERT INTO Mitarbeiter 
-                            (eintrittsdatum, strasse, PLZOrt, handynummer, beschäftigungsgrad, abteilung, kaderstufe, ahvnummer, austrittsdatum, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid)
+                            (eintrittsdatum, strasse, PLZ, Ort, handynummer, beschäftigungsgrad, abteilung, kaderstufe, ahvnummer, austrittsdatum, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid)
                             VALUES 
-                            (@eintritt, @strasse, @PLZOrt, @handy, @grad, @abteilung, @kader, @ahv, @austritt, @nationalitaet, @standort, @tätigkeitsbezeichnung, @telefon, @globalid);";
+                            (@eintritt, @strasse, @PLZ, @Ort, @handy, @grad, @abteilung, @kader, @ahv, @austritt, @nationalitaet, @standort, @tätigkeitsbezeichnung, @telefon, @globalid);";
                     
                         var cmdMitarbeiter = new SQLiteCommand(insertMitarbeiter, connection);
                         cmdMitarbeiter.Parameters.AddWithValue("@eintritt", eintrittsdatum);
                         cmdMitarbeiter.Parameters.AddWithValue("@strasse", strasse); 
-                        cmdMitarbeiter.Parameters.AddWithValue("@PLZOrt", PLZOrt);
+                        cmdMitarbeiter.Parameters.AddWithValue("@PLZ", PLZ);
+                        cmdMitarbeiter.Parameters.AddWithValue("@Ort", Ort);
                         cmdMitarbeiter.Parameters.AddWithValue("@handy", handynummer);
                         cmdMitarbeiter.Parameters.AddWithValue("@grad", beschaeftigungsgrad);
                         cmdMitarbeiter.Parameters.AddWithValue("@abteilung", abteilung);
@@ -122,7 +135,6 @@ namespace Contact_Manager_FL_MG_JW
                             }
                             if (!gui.ChbTrainee.Checked)
                             {
-                                command.ExecuteNonQuery();
                                 cmdMitarbeiter.ExecuteNonQuery();
                                 MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
                                     MessageBoxButtons.OK,
@@ -205,21 +217,24 @@ namespace Contact_Manager_FL_MG_JW
                         string firmenname = gui.txtbCoName.Text;
                         string geschaeftsadresse = gui.txtbCoAddresse.Text;
                         string geschaeftsnummer = gui.txtbCoPhoneNr.Text;
-                        string adresse = gui.txtbPrStreet.Text;
+                        string strasse = gui.txtbPrStreet.Text;
+                        string PLZ = gui.txtprplz.Text;
+                        string Ort = gui.TxtbCoPlace.Text;
                         string telefon = gui.txtbPrPhone.Text;
                     
                         string insertKunde = @"
                             INSERT INTO Kunde 
-                            (kundentyp, firmenname, geschäftsadresse, geschäftsnummer, adresse, telefon, globalid)
+                            (kundentyp, firmenname, geschäftsadresse, geschäftsnummer, strasse, PLZ, telefon, globalid)
                             VALUES 
-                            (@kundentyp, @firmenname, @geschaeftsadresse, @geschaeftsnummer, @adresse, @telefon, @globalid);";
+                            (@kundentyp, @firmenname, @geschaeftsadresse, @geschaeftsnummer, @strasse, @PLZ, @telefon, @globalid);";
                     
                         var cmdKunde = new SQLiteCommand(insertKunde, connection);
                         cmdKunde.Parameters.AddWithValue("@kundentyp", kundentyp);
                         cmdKunde.Parameters.AddWithValue("@firmenname", firmenname);
                         cmdKunde.Parameters.AddWithValue("@geschaeftsadresse", geschaeftsadresse);
                         cmdKunde.Parameters.AddWithValue("@geschaeftsnummer", geschaeftsnummer);
-                        cmdKunde.Parameters.AddWithValue("@adresse", adresse);
+                        cmdKunde.Parameters.AddWithValue("@strasse", strasse);
+                        cmdKunde.Parameters.AddWithValue("@PLZ", PLZ);
                         cmdKunde.Parameters.AddWithValue("@telefon", telefon);
                         cmdKunde.Parameters.AddWithValue("@globalid", globalId);
                         try
@@ -339,6 +354,7 @@ namespace Contact_Manager_FL_MG_JW
                     }
                 }
             }
+            //LadeDaten();
             return allValid;
         }
     }

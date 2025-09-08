@@ -114,5 +114,10 @@ namespace Contact_Manager_FL_MG_JW
                 }
             }
         }
+
+        private void LblEmpPlace_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
