@@ -978,7 +978,8 @@
             Controls.Add(BtnSave);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 5, 4, 5);
-            MaximumSize = new Size(1400, 1400);
+            MaximizeBox = false;
+            MaximumSize = new Size(2600, 2600);
             MinimumSize = new Size(1400, 1400);
             Name = "GUI_Create";
             Text = "Kontakt erstellen";
