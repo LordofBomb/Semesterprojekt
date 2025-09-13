@@ -13,8 +13,8 @@ namespace Contact_Manager_FL_MG_JW
 
 
             viewAllPanel = new Form_ViewAll();
-            viewAllPanel.Location = new Point(20, 500); // oder passend zu deinem Layout
-            viewAllPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            viewAllPanel.Location = new Point(250, 600);
+            viewAllPanel.Anchor = AnchorStyles.Top;
             Controls.Add(viewAllPanel);
         }
         

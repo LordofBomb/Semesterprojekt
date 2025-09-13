@@ -36,16 +36,16 @@ namespace Contact_Manager_FL_MG_JW
             // 
             // txtSuche
             // 
-            txtSuche.Location = new Point(10, 10);
+            txtSuche.Location = new Point(10, 14);
             txtSuche.Name = "txtSuche";
-            txtSuche.Size = new Size(200, 23);
+            txtSuche.Size = new Size(446, 31);
             txtSuche.TabIndex = 0;
             // 
             // btnSuche
             // 
-            btnSuche.Location = new Point(220, 10);
+            btnSuche.Location = new Point(477, 9);
             btnSuche.Name = "btnSuche";
-            btnSuche.Size = new Size(100, 27);
+            btnSuche.Size = new Size(140, 40);
             btnSuche.TabIndex = 1;
             btnSuche.Text = "Suchen";
             btnSuche.Click += BtnSuche_Click;
@@ -53,41 +53,44 @@ namespace Contact_Manager_FL_MG_JW
             // dataGridView
             // 
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView.Location = new Point(10, 50);
+            dataGridView.ColumnHeadersHeight = 34;
+            dataGridView.Location = new Point(10, 55);
             dataGridView.Name = "dataGridView";
             dataGridView.ReadOnly = true;
+            dataGridView.RowHeadersWidth = 62;
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.Size = new Size(760, 350);
+            dataGridView.Size = new Size(908, 350);
             dataGridView.TabIndex = 2;
             dataGridView.CellDoubleClick += DataGridView_CellDoubleClick;
             // 
             // BtnOpen
             // 
-            BtnOpen.Location = new Point(326, 10);
+            BtnOpen.Location = new Point(633, 9);
             BtnOpen.Name = "BtnOpen";
-            BtnOpen.Size = new Size(100, 27);
+            BtnOpen.Size = new Size(140, 40);
             BtnOpen.TabIndex = 3;
             BtnOpen.Text = "Eintrag öffnen";
             BtnOpen.Click += BtnOpen_Click;
             // 
             // BtnDeleteDash
             // 
-            BtnDeleteDash.Location = new Point(432, 10);
+            BtnDeleteDash.Location = new Point(788, 9);
             BtnDeleteDash.Name = "BtnDeleteDash";
-            BtnDeleteDash.Size = new Size(100, 27);
+            BtnDeleteDash.Size = new Size(130, 40);
             BtnDeleteDash.TabIndex = 4;
             BtnDeleteDash.Text = "Eintrag Löschen";
             BtnDeleteDash.Click += BtnDeleteDash_Click;
             // 
             // Form_ViewAll
             // 
+            BackColor = Color.Transparent;
             Controls.Add(BtnDeleteDash);
             Controls.Add(BtnOpen);
             Controls.Add(txtSuche);
             Controls.Add(btnSuche);
             Controls.Add(dataGridView);
             Name = "Form_ViewAll";
-            Size = new Size(780, 420);
+            Size = new Size(928, 416);
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
