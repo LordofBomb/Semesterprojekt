@@ -115,6 +115,7 @@
             // 
             // txtbTitel
             // 
+            txtbTitel.Anchor = AnchorStyles.Top;
             txtbTitel.Location = new Point(344, 155);
             txtbTitel.Margin = new Padding(4, 5, 4, 5);
             txtbTitel.Name = "txtbTitel";
@@ -123,6 +124,7 @@
             // 
             // lblTitel
             // 
+            lblTitel.Anchor = AnchorStyles.Top;
             lblTitel.AutoSize = true;
             lblTitel.Location = new Point(289, 159);
             lblTitel.Margin = new Padding(4, 0, 4, 0);
@@ -133,6 +135,7 @@
             // 
             // txtbFirstName
             // 
+            txtbFirstName.Anchor = AnchorStyles.Top;
             txtbFirstName.Location = new Point(344, 204);
             txtbFirstName.Margin = new Padding(4, 5, 4, 5);
             txtbFirstName.Name = "txtbFirstName";
@@ -141,6 +144,7 @@
             // 
             // txtbLastName
             // 
+            txtbLastName.Anchor = AnchorStyles.Top;
             txtbLastName.Location = new Point(344, 255);
             txtbLastName.Margin = new Padding(4, 5, 4, 5);
             txtbLastName.Name = "txtbLastName";
@@ -149,6 +153,7 @@
             // 
             // lblFirstName
             // 
+            lblFirstName.Anchor = AnchorStyles.Top;
             lblFirstName.AutoSize = true;
             lblFirstName.Location = new Point(256, 209);
             lblFirstName.Margin = new Padding(4, 0, 4, 0);
@@ -159,6 +164,7 @@
             // 
             // lblLastName
             // 
+            lblLastName.Anchor = AnchorStyles.Top;
             lblLastName.AutoSize = true;
             lblLastName.Location = new Point(276, 260);
             lblLastName.Margin = new Padding(4, 0, 4, 0);
@@ -169,6 +175,7 @@
             // 
             // ddlGender
             // 
+            ddlGender.Anchor = AnchorStyles.Top;
             ddlGender.DropDownStyle = ComboBoxStyle.DropDownList;
             ddlGender.FormattingEnabled = true;
             ddlGender.Items.AddRange(new object[] { "Männlich", "Weiblich", "LGBTQ+" });
@@ -181,6 +188,7 @@
             // 
             // lblGender
             // 
+            lblGender.Anchor = AnchorStyles.Top;
             lblGender.AutoSize = true;
             lblGender.Location = new Point(786, 104);
             lblGender.Margin = new Padding(4, 0, 4, 0);
@@ -191,6 +199,7 @@
             // 
             // dtpBirthday
             // 
+            dtpBirthday.Anchor = AnchorStyles.Top;
             dtpBirthday.Location = new Point(890, 199);
             dtpBirthday.Margin = new Padding(4, 5, 4, 5);
             dtpBirthday.Name = "dtpBirthday";
@@ -199,6 +208,7 @@
             // 
             // lblBirthday
             // 
+            lblBirthday.Anchor = AnchorStyles.Top;
             lblBirthday.AutoSize = true;
             lblBirthday.Location = new Point(784, 205);
             lblBirthday.Margin = new Padding(4, 0, 4, 0);
@@ -209,6 +219,7 @@
             // 
             // ddlSalutation
             // 
+            ddlSalutation.Anchor = AnchorStyles.Top;
             ddlSalutation.DropDownStyle = ComboBoxStyle.DropDownList;
             ddlSalutation.FormattingEnabled = true;
             ddlSalutation.Items.AddRange(new object[] { "", "Herr", "Frau" });
@@ -221,6 +232,7 @@
             // 
             // lblSalutation
             // 
+            lblSalutation.Anchor = AnchorStyles.Top;
             lblSalutation.AutoSize = true;
             lblSalutation.Location = new Point(267, 109);
             lblSalutation.Margin = new Padding(4, 0, 4, 0);
@@ -231,6 +243,7 @@
             // 
             // txtbEMail
             // 
+            txtbEMail.Anchor = AnchorStyles.Top;
             txtbEMail.Location = new Point(889, 149);
             txtbEMail.Margin = new Padding(4, 5, 4, 5);
             txtbEMail.Name = "txtbEMail";
@@ -239,6 +252,7 @@
             // 
             // lblEMail
             // 
+            lblEMail.Anchor = AnchorStyles.Top;
             lblEMail.AutoSize = true;
             lblEMail.Location = new Point(817, 155);
             lblEMail.Margin = new Padding(4, 0, 4, 0);
@@ -249,6 +263,7 @@
             // 
             // ddbStatus
             // 
+            ddbStatus.Anchor = AnchorStyles.Top;
             ddbStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             ddbStatus.FormattingEnabled = true;
             ddbStatus.Items.AddRange(new object[] { "aktiv", "inaktiv" });
@@ -261,6 +276,7 @@
             // 
             // lblStatus
             // 
+            lblStatus.Anchor = AnchorStyles.Top;
             lblStatus.AutoSize = true;
             lblStatus.Location = new Point(821, 254);
             lblStatus.Margin = new Padding(4, 0, 4, 0);
@@ -271,6 +287,7 @@
             // 
             // rbttCustomer
             // 
+            rbttCustomer.Anchor = AnchorStyles.Top;
             rbttCustomer.AutoSize = true;
             rbttCustomer.Location = new Point(617, 359);
             rbttCustomer.Margin = new Padding(4, 5, 4, 5);
@@ -284,6 +301,7 @@
             // 
             // rbttEmployee
             // 
+            rbttEmployee.Anchor = AnchorStyles.Top;
             rbttEmployee.AutoSize = true;
             rbttEmployee.Location = new Point(710, 359);
             rbttEmployee.Margin = new Padding(4, 5, 4, 5);
@@ -744,6 +762,7 @@
             // 
             // groupBoxCustomer
             // 
+            groupBoxCustomer.Anchor = AnchorStyles.Top;
             groupBoxCustomer.BackColor = Color.Transparent;
             groupBoxCustomer.Controls.Add(TxtbCoPlace);
             groupBoxCustomer.Controls.Add(LblCoPlace);
@@ -810,6 +829,7 @@
             // 
             // groupBoxEmployee
             // 
+            groupBoxEmployee.Anchor = AnchorStyles.Top;
             groupBoxEmployee.BackColor = Color.Transparent;
             groupBoxEmployee.Controls.Add(ChkbExitDate);
             groupBoxEmployee.Controls.Add(LblEmpPlace);
@@ -926,6 +946,7 @@
             // 
             // BtnSave
             // 
+            BtnSave.Anchor = AnchorStyles.Top;
             BtnSave.Location = new Point(183, 1138);
             BtnSave.Margin = new Padding(4, 5, 4, 5);
             BtnSave.Name = "BtnSave";
@@ -937,6 +958,7 @@
             // 
             // BtnDelete
             // 
+            BtnDelete.Anchor = AnchorStyles.Top;
             BtnDelete.Location = new Point(870, 1138);
             BtnDelete.Margin = new Padding(4, 5, 4, 5);
             BtnDelete.Name = "BtnDelete";
@@ -953,7 +975,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             ClientSize = new Size(1378, 1344);
-            Controls.Add(groupBoxEmployee);
             Controls.Add(groupBoxCustomer);
             Controls.Add(BtnDelete);
             Controls.Add(rbttEmployee);
@@ -975,6 +996,7 @@
             Controls.Add(lblTitel);
             Controls.Add(txtbTitel);
             Controls.Add(BtnSave);
+            Controls.Add(groupBoxEmployee);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
