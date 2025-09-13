@@ -61,8 +61,8 @@ namespace Contact_Manager_FL_MG_JW
             {
                 // Bestehenden Datensatz aktualisieren
 
-                string id = this.Tag.ToString();
-                UpdateExistingEntry(id);
+                var creator = new UpdateEntry(this);
+                creator.UpdatePerson(sender, e);
             }
             else
             {
@@ -72,52 +72,85 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void UpdateExistingEntry(string id)
+        private void ChkbExitDate_CheckedChanged(object sender, EventArgs e)
         {
-            string dbPfad = Path.Combine(Application.StartupPath, "contactManagerDB.db");
-            using (var connection = new SQLiteConnection($"Data Source={dbPfad};Version=3;"))
+            if (ChkbExitDate.Checked)
             {
-                connection.Open();
-                string sql = @"
-                    UPDATE Global SET
-                        Anrede = @Anrede,
-                        Titel = @Titel,
-                        Vorname = @Vorname,
-                        Name = @Name,
-                        Geschlecht = @Geschlecht,
-                        `E-Mail` = @Email,
-                        Geburtstag = @Geburtstag,
-                        Status = @Status
-                    WHERE globalid = @Id";
-
-                using (var command = new SQLiteCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@Anrede", ddlSalutation.Text);
-                    command.Parameters.AddWithValue("@Titel", txtbTitel.Text);
-                    command.Parameters.AddWithValue("@Vorname", txtbFirstName.Text);
-                    command.Parameters.AddWithValue("@Name", txtbLastName.Text);
-                    command.Parameters.AddWithValue("@Geschlecht", ddlGender.Text);
-                    command.Parameters.AddWithValue("@Email", txtbEMail.Text);
-                    command.Parameters.AddWithValue("@Geburtstag", dtpBirthday.Value.Date.Ticks);
-                    command.Parameters.AddWithValue("@Status", ddbStatus.Text);
-                    command.Parameters.AddWithValue("@Id", id);
-
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                        MessageBox.Show("Kontakt erfolgreich aktualisiert.", "Erfolg", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Fehler beim Aktualisieren: " + ex.Message, "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+                dtpExitDate.Visible = true;
+            }
+            else
+            {
+                dtpExitDate.Visible = false;
             }
         }
 
-        private void LblEmpPlace_Click(object sender, EventArgs e)
+        private void BtnDelete_Click(object sender, EventArgs e)
         {
 
+            if (this.Tag == null)
+            {
+                MessageBox.Show("Kein Datensatz geladen.");
+                return;
+            }
+
+            var confirm = MessageBox.Show("Möchtest du diesen Eintrag wirklich löschen?", "Bestätigung", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirm != DialogResult.Yes) return;
+
+            long globalId = Convert.ToInt64(this.Tag);
+
+            string dbPfad = Path.Combine(Application.StartupPath, "contactManagerDB.db");
+
+            using (var connection = new SQLiteConnection($"Data Source={dbPfad};Version=3;"))
+            {
+                connection.Open();
+
+                long mitarbeiterId = -1;
+                string sqlGetMid = "SELECT mitarbeiternummer FROM Mitarbeiter WHERE globalid = @globalid";
+                using (var cmdMid = new SQLiteCommand(sqlGetMid, connection))
+                {
+                    cmdMid.Parameters.AddWithValue("@globalid", globalId);
+                    var result = cmdMid.ExecuteScalar();
+                    if (result != null && long.TryParse(result.ToString(), out var mid))
+                        mitarbeiterId = mid;
+                }
+
+                if (mitarbeiterId != -1)
+                {
+                    string sqlDeleteLernender = "DELETE FROM Lernender WHERE mitarbeiterid = @mid";
+                    using (var cmd = new SQLiteCommand(sqlDeleteLernender, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@mid", mitarbeiterId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                string sqlDeleteMitarbeiter = "DELETE FROM Mitarbeiter WHERE globalid = @globalid";
+                using (var cmd = new SQLiteCommand(sqlDeleteMitarbeiter, connection))
+                {
+                    cmd.Parameters.AddWithValue("@globalid", globalId);
+                    cmd.ExecuteNonQuery();
+                }
+
+                string sqlDeleteKunde = "DELETE FROM Kunde WHERE globalid = @globalid";
+                using (var cmd = new SQLiteCommand(sqlDeleteKunde, connection))
+                {
+                    cmd.Parameters.AddWithValue("@globalid", globalId);
+                    cmd.ExecuteNonQuery();
+                }
+
+                string sqlDeleteGlobal = "DELETE FROM Global WHERE globalid = @globalid";
+                using (var cmd = new SQLiteCommand(sqlDeleteGlobal, connection))
+                {
+                    cmd.Parameters.AddWithValue("@globalid", globalId);
+                    cmd.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Eintrag erfolgreich gelöscht.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+
+
+            }
         }
     }
 }
+

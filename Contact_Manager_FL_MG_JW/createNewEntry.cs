@@ -20,10 +20,8 @@ namespace Contact_Manager_FL_MG_JW
 
         private static DateTime? GetNullable(DateTimePicker dp) => dp.Checked ? dp.Value.Date : (DateTime?)null;
 
-        internal void CreatePerson(object sender, EventArgs e) 
+        internal void CreatePerson(object sender, EventArgs e)
         {
-            // -------------------------- Abschnitt Global --------------------------
-
             string anrede = gui.ddlSalutation.Text;
             string titel = gui.txtbTitel.Text;
             string vorname = gui.txtbFirstName.Text;
@@ -33,14 +31,59 @@ namespace Contact_Manager_FL_MG_JW
             string mail = gui.txtbEMail.Text;
             string status = gui.ddbStatus.Text;
             string acctype = "";
-            if (gui.rbttEmployee.Checked == true) 
+
+            // -------------------------- Prüfen ob Mitarbeiter oder Kunde und Accounttyp setzen --------------------------
+            if (!gui.rbttCustomer.Checked && !gui.rbttEmployee.Checked)
             {
-                acctype = "Mitarbeiter";
+                MessageBox.Show("Bitte Kunde oder Mitarbeiter auswählen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
             else
             {
-                acctype = "Kunde";
+                if (gui.rbttEmployee.Checked == true)
+                {
+                    acctype = "Mitarbeiter";
+
+                    if (gui.ChbTrainee.Checked)
+                    {
+                        if (!ValidateRequiredFields(gui.groupBoxTrainee))
+                        {
+                            MessageBox.Show("Bitte alle Pflichtfelder für Lernende ausfüllen!");
+                            return;
+                        }
+                    }
+                    if (
+                        string.IsNullOrWhiteSpace(anrede) ||
+                        string.IsNullOrWhiteSpace(vorname) ||
+                        string.IsNullOrWhiteSpace(nachname) ||
+                        string.IsNullOrWhiteSpace(geschlecht) ||
+                        string.IsNullOrWhiteSpace(geburtsdatum) ||
+                        string.IsNullOrWhiteSpace(mail) ||
+                        string.IsNullOrWhiteSpace(status) ||
+                        !ValidateRequiredFields(gui.groupBoxEmployee))
+                    {
+                        MessageBox.Show("Bitte alle Pflichtfelder ausfüllen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    acctype = "Kunde";
+
+                    if (string.IsNullOrWhiteSpace(anrede) ||
+                        string.IsNullOrWhiteSpace(vorname) ||
+                        string.IsNullOrWhiteSpace(nachname) ||
+                        string.IsNullOrWhiteSpace(geschlecht) ||
+                        string.IsNullOrWhiteSpace(geburtsdatum) ||
+                        string.IsNullOrWhiteSpace(mail) ||
+                        string.IsNullOrWhiteSpace(status))
+                    {
+                        MessageBox.Show("Bitte alle Pflichtfelder ausfüllen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
             }
+
 
             string dbPfad = Path.Combine(Application.StartupPath, "contactManagerDB.db");
 
@@ -49,13 +92,15 @@ namespace Contact_Manager_FL_MG_JW
                 connection.Open();
 
                 string sql = @"
-                            INSERT INTO Global 
-                            (Anrede, Titel, Vorname, Name, Geschlecht, Geburtstag, `E-Mail`, Status, Accounttyp) 
-                            VALUES 
-                            (@anrede, @titel, @vorname, @nachname, @geschlecht, @geburtsdatum, @mail, @status, @Accounttyp)";
+                    INSERT INTO Global 
+                    (Anrede, Vorname, Name, Geschlecht, Geburtstag, `E-Mail`, Status, Accounttyp) 
+                    VALUES 
+                    (@anrede, @vorname, @nachname, @geschlecht, @geburtsdatum, @mail, @status, @Accounttyp)";
 
                 using (var command = new SQLiteCommand(sql, connection))
                 {
+
+
                     command.Parameters.AddWithValue("@anrede", anrede);
                     command.Parameters.AddWithValue("@titel", titel);
                     command.Parameters.AddWithValue("@vorname", vorname);
@@ -66,16 +111,10 @@ namespace Contact_Manager_FL_MG_JW
                     command.Parameters.AddWithValue("@status", status);
                     command.Parameters.AddWithValue("@Accounttyp", acctype);
 
-                    if (!gui.rbttCustomer.Checked && !gui.rbttEmployee.Checked)
-                    {
-                        MessageBox.Show("Bitte Kunde oder Mitarbeiter auswählen!", "Fehler!",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    }
                     command.ExecuteNonQuery();
+
                     long globalId = connection.LastInsertRowId;
 
-                    // -------------------------- Abschnitt Mitarbeiter --------------------------
                     if (gui.rbttEmployee.Checked)
                     {
                         string eintrittsdatum = gui.dtphiringdate.Value.ToString("yyyy-MM-dd");
@@ -86,22 +125,23 @@ namespace Contact_Manager_FL_MG_JW
                         string handynummer = gui.txtbMoPhone.Text;
                         string beschaeftigungsgrad = gui.nudEmpLevel.Text;
                         string abteilung = gui.ddbDepartment.Text;
-                        int kaderstufe = 0;
-                        int.TryParse(gui.ddbCadreLvl.Text, out kaderstufe);
+                        string kaderstufe = gui.ddbCadreLvl.Text;
                         string ahvnummer = gui.txtbAHVNr.Text;
                         string nationalitaet = gui.txtbNationality.Text;
                         string standort = gui.ddbLoAddress.Text;
                         string taetigkeit = gui.txtbRole.Text;
                         string telefonintern = gui.txtbIntPhNr.Text;
-                        string insertMitarbeiter = @"
-                            INSERT INTO Mitarbeiter 
-                            (eintrittsdatum, strasse, PLZ, Ort, handynummer, beschäftigungsgrad, abteilung, kaderstufe, ahvnummer, austrittsdatum, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid)
-                            VALUES 
-                            (@eintritt, @strasse, @PLZ, @Ort, @handy, @grad, @abteilung, @kader, @ahv, @austritt, @nationalitaet, @standort, @tätigkeitsbezeichnung, @telefon, @globalid);";
-                    
-                        var cmdMitarbeiter = new SQLiteCommand(insertMitarbeiter, connection);
+
+                        string updateMitarbeiter = @"
+                        INSERT INTO Mitarbeiter 
+                        (eintrittsdatum, strasse, PLZ, Ort, handynummer, beschäftigungsgrad, abteilung, kaderstufe, ahvnummer, austrittsdatum, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid)
+                        VALUES 
+                        (@eintritt, @strasse, @PLZ, @Ort, @handy, @grad, @abteilung, @kader, @ahv, @austritt, @nationalitaet, @standort, @tätigkeitsbezeichnung, @telefon, @globalid);";
+
+                        var cmdMitarbeiter = new SQLiteCommand(updateMitarbeiter, connection);
+
                         cmdMitarbeiter.Parameters.AddWithValue("@eintritt", eintrittsdatum);
-                        cmdMitarbeiter.Parameters.AddWithValue("@strasse", strasse); 
+                        cmdMitarbeiter.Parameters.AddWithValue("@strasse", strasse);
                         cmdMitarbeiter.Parameters.AddWithValue("@PLZ", PLZ);
                         cmdMitarbeiter.Parameters.AddWithValue("@Ort", Ort);
                         cmdMitarbeiter.Parameters.AddWithValue("@handy", handynummer);
@@ -115,74 +155,35 @@ namespace Contact_Manager_FL_MG_JW
                         cmdMitarbeiter.Parameters.AddWithValue("@tätigkeitsbezeichnung", taetigkeit);
                         cmdMitarbeiter.Parameters.AddWithValue("@telefon", telefonintern);
                         cmdMitarbeiter.Parameters.AddWithValue("@globalid", globalId);
-                
-                        try
-                        {
-                            if (
-                                string.IsNullOrWhiteSpace(anrede) ||
-                                string.IsNullOrWhiteSpace(titel) ||
-                                string.IsNullOrWhiteSpace(vorname) ||
-                                string.IsNullOrWhiteSpace(nachname) ||
-                                string.IsNullOrWhiteSpace(geschlecht) ||
-                                string.IsNullOrWhiteSpace(geburtsdatum) ||
-                                string.IsNullOrWhiteSpace(mail) ||
-                                string.IsNullOrWhiteSpace(status) ||
-                                !ValidateRequiredFields(gui.groupBoxEmployee)
-                                )
-                            {
-                                MessageBox.Show("Bitte alle Pflichtfelder ausfüllen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                return;
-                            }
-                            if (!gui.ChbTrainee.Checked)
-                            {
-                                cmdMitarbeiter.ExecuteNonQuery();
-                                MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information
-                                );
-                            }
-                            else
-                            {
-                                long mitarbeiterId = connection.LastInsertRowId;
 
-                                // -------------------------- Abschnitt Lernende --------------------------
-                                if (gui.ChbTrainee.Checked)
-                                {
-                                    if (!ValidateRequiredFields(gui.groupBoxTrainee))
-                                    {
-                                        MessageBox.Show("Bitte alle Pflichtfelder für Lernende ausfüllen!");
-                                        return;
-                                    }
-                                    string lehrjahre = gui.txtbNrOfYearsOfAppr.Text;
-                                    string aktuelleslehrjahr = gui.txtbWhYearsOfAppr.Text;
-                                    string insertLernender = @"
-                                                                                INSERT INTO Lernender
-                                                                                (lehrjahre, aktuelleslehrjahr, mitarbeiterid)
-                                                                                VALUES
-                                                                                (@lehrjahre, @aktuelleslehrjahr, @mitarbeiterid);";
-                                    var cmdLernender = new SQLiteCommand(insertLernender, connection);
-                                    cmdLernender.Parameters.AddWithValue("@lehrjahre", lehrjahre);
-                                    cmdLernender.Parameters.AddWithValue("@aktuelleslehrjahr", aktuelleslehrjahr);
-                                    cmdLernender.Parameters.AddWithValue("@mitarbeiterid", mitarbeiterId);
-                                    command.ExecuteNonQuery();
-                                    cmdMitarbeiter.ExecuteNonQuery();
-                                    cmdLernender.ExecuteNonQuery();
-                                    MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information
-                                    );
-                                }
-                            }
-                        }
-                        catch (Exception ex)
+
+                        if (gui.ChbTrainee.Checked)
                         {
-                            MessageBox.Show("Fehler: " + ex.Message, "Fehler!",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error
-                            );
+                            long mitarbeiterId = connection.LastInsertRowId;
+
+                            string lehrjahre = gui.txtbNrOfYearsOfAppr.Text;
+                            string aktuelleslehrjahr = gui.txtbWhYearsOfAppr.Text;
+                            string updateLernender = @"                         
+                            INSERT INTO Lernender
+                            (lehrjahre, aktuelleslehrjahr, mitarbeiterID)
+                            VALUES
+                            (@lehrjahre, @aktuelleslehrjahr, @mitarbeiterID);";
+
+                            var cmdLernender = new SQLiteCommand(updateLernender, connection);
+                            cmdLernender.Parameters.AddWithValue("@lehrjahre", lehrjahre);
+                            cmdLernender.Parameters.AddWithValue("@aktuelleslehrjahr", aktuelleslehrjahr);
+                            cmdLernender.Parameters.AddWithValue("@mitarbeiterID", mitarbeiterId);
+
+                            cmdLernender.ExecuteNonQuery();
                         }
+
+                        cmdMitarbeiter.ExecuteNonQuery();
+
+                        MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     }
-                    // -------------------------- Abschnitt Kunden --------------------------
+
                     if (gui.rbttCustomer.Checked)
                     {
                         string kundentyp = "";
@@ -221,59 +222,34 @@ namespace Contact_Manager_FL_MG_JW
                         string PLZ = gui.txtprplz.Text;
                         string Ort = gui.TxtbCoPlace.Text;
                         string telefon = gui.txtbPrPhone.Text;
-                    
-                        string insertKunde = @"
-                            INSERT INTO Kunde 
-                            (kundentyp, firmenname, geschäftsadresse, geschäftsnummer, strasse, PLZ, telefon, globalid)
-                            VALUES 
-                            (@kundentyp, @firmenname, @geschaeftsadresse, @geschaeftsnummer, @strasse, @PLZ, @telefon, @globalid);";
-                    
-                        var cmdKunde = new SQLiteCommand(insertKunde, connection);
+
+                        string updateKunde = @"
+                        INSERT INTO Kunde 
+                        (kundentyp, firmenname, geschäftsadresse, geschäftsnummer, strasse, PLZ, Ort, telefon, globalid)
+                        VALUES 
+                        (@kundentyp, @firmenname, @geschaeftsadresse, @geschaeftsnummer, @strasse, @PLZ, @ort , @telefon, @globalid);";
+
+                        var cmdKunde = new SQLiteCommand(updateKunde, connection);
                         cmdKunde.Parameters.AddWithValue("@kundentyp", kundentyp);
                         cmdKunde.Parameters.AddWithValue("@firmenname", firmenname);
                         cmdKunde.Parameters.AddWithValue("@geschaeftsadresse", geschaeftsadresse);
                         cmdKunde.Parameters.AddWithValue("@geschaeftsnummer", geschaeftsnummer);
                         cmdKunde.Parameters.AddWithValue("@strasse", strasse);
                         cmdKunde.Parameters.AddWithValue("@PLZ", PLZ);
+                        cmdKunde.Parameters.AddWithValue("ort", Ort);
                         cmdKunde.Parameters.AddWithValue("@telefon", telefon);
                         cmdKunde.Parameters.AddWithValue("@globalid", globalId);
-                        try
-                        {
-                            if (string.IsNullOrWhiteSpace(anrede) ||
-                                //string.IsNullOrWhiteSpace(titel) ||
-                                string.IsNullOrWhiteSpace(vorname) ||
-                                string.IsNullOrWhiteSpace(nachname) ||
-                                string.IsNullOrWhiteSpace(geschlecht) ||
-                                string.IsNullOrWhiteSpace(geburtsdatum) ||
-                                string.IsNullOrWhiteSpace(mail) ||
-                                string.IsNullOrWhiteSpace(status))
-                            {
-                                MessageBox.Show("Bitte alle Pflichtfelder ausfüllen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                return;
-                            }
-                            command.ExecuteNonQuery();
-                            MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information
-                            );
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Fehler: " + ex.Message, "Fehler!",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error
-                            );
-                        }
-                        if (!ValidateRequiredFields(gui.groupBoxCustomer))
-                        {
-                            MessageBox.Show("Bitte alle Pflichtfelder für Kunden ausfüllen!");
-                            return;
-                        }
+
                         cmdKunde.ExecuteNonQuery();
+
+                        MessageBox.Show("Daten erfolgreich gespeichert!", "Speichern erfolgreich!",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     }
                 }
             }
         }
+
 
         // -------------------------- Abschnitt Pflichtfeldprüfung --------------------------
         private bool ValidateRequiredFields(Control parent)

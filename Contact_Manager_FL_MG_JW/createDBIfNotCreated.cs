@@ -65,7 +65,7 @@ namespace Contact_Manager_FL_MG_JW
                     handynummer TEXT,
                     beschäftigungsgrad INTEGER,
                     abteilung TEXT,
-                    kaderstufe INTEGER,
+                    kaderstufe TEXT,
                     ahvnummer TEXT,
                     austrittsdatum TEXT,
                     nationalität TEXT,
