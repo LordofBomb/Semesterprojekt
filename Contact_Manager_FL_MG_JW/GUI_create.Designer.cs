@@ -885,7 +885,7 @@
             // LblEmpPlz
             // 
             LblEmpPlz.AutoSize = true;
-            LblEmpPlz.Location = new Point(119, 187);
+            LblEmpPlz.Location = new Point(185, 185);
             LblEmpPlz.Margin = new Padding(4, 0, 4, 0);
             LblEmpPlz.Name = "LblEmpPlz";
             LblEmpPlz.Size = new Size(45, 25);
@@ -951,10 +951,11 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(1378, 1344);
-            Controls.Add(groupBoxCustomer);
             Controls.Add(groupBoxEmployee);
+            Controls.Add(groupBoxCustomer);
             Controls.Add(BtnDelete);
             Controls.Add(rbttEmployee);
             Controls.Add(rbttCustomer);
@@ -980,7 +981,6 @@
             MaximumSize = new Size(1400, 1400);
             MinimumSize = new Size(1400, 1400);
             Name = "GUI_Create";
-            StartPosition = FormStartPosition.CenterScreen;
             Text = "Kontakt erstellen";
             ((System.ComponentModel.ISupportInitialize)nudEmpLevel).EndInit();
             groupBoxCustomer.ResumeLayout(false);
