@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace Contact_Manager_FL_MG_JW
@@ -169,7 +170,15 @@ namespace Contact_Manager_FL_MG_JW
                                 bearbeitenFormular.txtbMoPhone.Text = row.Field<string>("Handynummer");
                                 bearbeitenFormular.txtbNationality.Text = row.Field<string>("nationalität");
                                 bearbeitenFormular.ddbLoAddress.Text = row.Field<string>("Standort");
-                                bearbeitenFormular.dtphiringdate.Value = DateTime.Parse(row.Field<string>("Eintrittsdatum"));
+                                var s = row.Field<string>("Eintrittsdatum");
+                                DateTime eintritt;
+                                var deCH = CultureInfo.GetCultureInfo("de-CH");
+                                var formats = new[] { "yyyy-MM-dd", "dd.MM.yyyy", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ss.fff" };
+
+                                bool ok = !string.IsNullOrWhiteSpace(s) &&
+                                          (DateTime.TryParseExact(s, formats, deCH, DateTimeStyles.AssumeLocal, out eintritt)
+                                           || DateTime.TryParse(s, deCH, DateTimeStyles.AssumeLocal, out eintritt));
+
                                 bearbeitenFormular.txtbIntPhNr.Text = row.Field<string>("telefonnummerintern");
                                 bearbeitenFormular.dtpExitDate.Value = DateTime.Parse(row.Field<string>("Austrittsdatum"));
                                 bearbeitenFormular.ddbCadreLvl.Text = row.Field<string>("Kaderstufe");
@@ -340,6 +349,10 @@ namespace Contact_Manager_FL_MG_JW
             MessageBox.Show("Eintrag erfolgreich gelöscht.");
             LadeDatenDashboard();
 
+
+
+
+        }
+
     }
-}
 }

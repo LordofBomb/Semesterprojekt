@@ -151,6 +151,175 @@ namespace Contact_Manager_FL_MG_JW
 
             }
         }
+
+        private void btnExportCsv_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new SaveFileDialog())
+            {
+                dlg.Title = "CSV exportieren";
+                dlg.Filter = "CSV-Datei (*.csv)|*.csv";
+                dlg.FileName = $"kontakt_form_{DateTime.Now:HH-mm_dd-MM-yyyy}.csv";
+                dlg.RestoreDirectory = true;
+
+                if (dlg.ShowDialog(this) != DialogResult.OK) return;
+
+                try
+                {
+                    ExportCurrentFormToCsv(dlg.FileName, ';');
+                    MessageBox.Show(this, "Formulardaten wurden exportiert.", "CSV Export",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, $"Export fehlgeschlagen:\n{ex.Message}", "CSV Export",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        // Exportiert ALLE Felder aus GUI_Create als eine CSV-Zeile (auch leere)
+        private void ExportCurrentFormToCsv(string path, char delimiter = ';')
+        {
+            // Accounttyp und Kundentyp (A-E)
+            string accounttyp =
+                (rbttCustomer?.Checked ?? false) ? "Kunde" :
+                (rbttEmployee?.Checked ?? false) ? "Mitarbeiter" : "";
+
+            string kundentyp =
+                (rbttKtA?.Checked ?? false) ? "A" :
+                (rbttKtB?.Checked ?? false) ? "B" :
+                (rbttKtC?.Checked ?? false) ? "C" :
+                (rbttKtD?.Checked ?? false) ? "D" :
+                (rbttKtE?.Checked ?? false) ? "E" : "";
+
+            // CSV-Schema: stabile Spaltenreihenfolge
+            var dt = new DataTable("FormExport");
+            string[] columns = new[]
+            {
+        // Basis
+        "Accounttyp",
+        "Kundentyp",
+        "Anrede",
+        "Titel",
+        "Vorname",
+        "Name",
+        "Geschlecht",
+        "Geburtstag",
+        "E-Mail",
+        "Status",
+
+        // Kunde / Firma
+        "Firmennamen",
+        "Geschaeftsadresse",
+        "Geschaeftsnummer",
+        "Strasse (Kunde)",
+        "PLZ (Kunde)",
+        "Ort (Kunde)",
+        "Telefonnr/Handynr (Kunde)",
+
+        // Mitarbeiter
+        "Eintrittsdatum",
+        "Austrittsdatum aktiv",
+        "Austrittsdatum",
+        "Strasse (Mitarbeiter)",
+        "PLZ (Mitarbeiter)",
+        "Ort (Mitarbeiter)",
+        "Mobiltelefon",
+        "AHV-Nummer",
+        "Nationalitaet",
+        "Standortadresse",
+        "Abteilung",
+        "Taetigkeitsbezeichnung",
+        "Kaderstufe",
+        "Telefonnummer intern",
+        "Lehrling",
+        "Anzahl Ausbildungsjahre",
+        "Aktuelles Ausbildungsjahr"
+    };
+            foreach (var c in columns) dt.Columns.Add(c);
+
+            var row = dt.NewRow();
+
+            // Basis
+            row["Accounttyp"] = accounttyp;
+            row["Kundentyp"] = kundentyp;
+            row["Anrede"] = ddlSalutation?.Text ?? "";
+            row["Titel"] = txtbTitel?.Text ?? "";
+            row["Vorname"] = txtbFirstName?.Text ?? "";
+            row["Name"] = txtbLastName?.Text ?? "";
+            row["Geschlecht"] = ddlGender?.Text ?? "";
+            row["Geburtstag"] = dtpBirthday != null ? dtpBirthday.Value.ToString("yyyy-MM-dd") : "";
+            row["E-Mail"] = txtbEMail?.Text ?? "";
+            row["Status"] = ddbStatus?.Text ?? "";
+
+            // Kunden
+            row["Firmennamen"] = txtbCoName?.Text ?? "";
+            row["Geschaeftsadresse"] = txtbCoAddresse?.Text ?? "";
+            row["Geschaeftsnummer"] = txtbCoPhoneNr?.Text ?? "";
+            row["Strasse (Kunde)"] = txtbPrStreet?.Text ?? "";
+            row["PLZ (Kunde)"] = txtprplz?.Text ?? "";
+            row["Ort (Kunde)"] = TxtbCoPlace?.Text ?? "";
+            row["Telefonnr/Handynr (Kunde)"] = txtbPrPhone?.Text ?? "";
+
+            // Mitarbeiter
+            row["Eintrittsdatum"] = dtphiringdate != null ? dtphiringdate.Value.ToString("yyyy-MM-dd") : "";
+            row["Austrittsdatum aktiv"] = (ChkbExitDate?.Checked ?? false) ? "true" : "false";
+            row["Austrittsdatum"] = dtpExitDate != null ? dtpExitDate.Value.ToString("yyyy-MM-dd") : "";
+            row["Strasse (Mitarbeiter)"] = txtbEmpStreet?.Text ?? "";
+            row["PLZ (Mitarbeiter)"] = txtbEmpPlz?.Text ?? "";
+            row["Ort (Mitarbeiter)"] = txtbEmpPlace?.Text ?? "";
+            row["Mobiltelefon"] = txtbMoPhone?.Text ?? "";
+            row["AHV-Nummer"] = txtbAHVNr?.Text ?? "";
+            row["Nationalitaet"] = txtbNationality?.Text ?? "";
+            row["Standortadresse"] = ddbLoAddress?.Text ?? "";
+            row["Abteilung"] = ddbDepartment?.Text ?? "";
+            row["Taetigkeitsbezeichnung"] = txtbRole?.Text ?? "";
+            row["Kaderstufe"] = ddbCadreLvl?.Text ?? "";
+            row["Telefonnummer intern"] = txtbIntPhNr?.Text ?? "";
+            row["Lehrling"] = (ChbTrainee?.Checked ?? false) ? "true" : "false";
+            row["Anzahl Ausbildungsjahre"] = txtbNrOfYearsOfAppr?.Text ?? "";
+            row["Aktuelles Ausbildungsjahr"] = txtbWhYearsOfAppr?.Text ?? "";
+
+            dt.Rows.Add(row);
+
+            WriteDataTableToCsv(dt, path, delimiter, includeHeaders: true);
+        }
+
+        // CSV-Schreiber für DataTable
+        private static void WriteDataTableToCsv(DataTable dt, string path, char delimiter = ';', bool includeHeaders = true)
+        {
+            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var writer = new StreamWriter(fs, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true)))
+            {
+                if (includeHeaders)
+                {
+                    var headers = dt.Columns.Cast<DataColumn>()
+                        .Select(c => EscapeCsv(c.ColumnName, delimiter));
+                    writer.WriteLine(string.Join(delimiter.ToString(), headers));
+                }
+
+                foreach (DataRow r in dt.Rows)
+                {
+                    var cells = r.ItemArray.Select(v => EscapeCsv(Convert.ToString(v) ?? string.Empty, delimiter));
+                    writer.WriteLine(string.Join(delimiter.ToString(), cells));
+                }
+            }
+        }
+
+        // CSV-Escaping
+        private static string EscapeCsv(string value, char delimiter)
+        {
+            if (value == null) return string.Empty;
+
+            bool mustQuote =
+                value.Contains(delimiter.ToString()) ||
+                value.Contains("\"") ||
+                value.Contains("\n") ||
+                value.Contains("\r");
+
+            value = value.Replace("\"", "\"\"");
+            return mustQuote ? $"\"{value}\"" : value;
+        }
     }
 }
 
