@@ -39,12 +39,12 @@ namespace Contact_Manager_FL_MG_JW
             // 
             txtSuche.Location = new Point(10, 14);
             txtSuche.Name = "txtSuche";
-            txtSuche.Size = new Size(856, 31);
+            txtSuche.Size = new Size(487, 31);
             txtSuche.TabIndex = 0;
             // 
             // btnSuche
             // 
-            btnSuche.Location = new Point(889, 9);
+            btnSuche.Location = new Point(503, 9);
             btnSuche.Name = "btnSuche";
             btnSuche.Size = new Size(140, 40);
             btnSuche.TabIndex = 1;
@@ -60,13 +60,13 @@ namespace Contact_Manager_FL_MG_JW
             dataGridView.ReadOnly = true;
             dataGridView.RowHeadersWidth = 62;
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.Size = new Size(1325, 420);
+            dataGridView.Size = new Size(915, 300);
             dataGridView.TabIndex = 2;
             dataGridView.CellDoubleClick += DataGridView_CellDoubleClick;
             // 
             // BtnOpen
             // 
-            BtnOpen.Location = new Point(1048, 9);
+            BtnOpen.Location = new Point(649, 9);
             BtnOpen.Name = "BtnOpen";
             BtnOpen.Size = new Size(140, 40);
             BtnOpen.TabIndex = 3;
@@ -75,7 +75,7 @@ namespace Contact_Manager_FL_MG_JW
             // 
             // BtnDeleteDash
             // 
-            BtnDeleteDash.Location = new Point(1205, 9);
+            BtnDeleteDash.Location = new Point(795, 9);
             BtnDeleteDash.Name = "BtnDeleteDash";
             BtnDeleteDash.Size = new Size(130, 40);
             BtnDeleteDash.TabIndex = 4;
@@ -92,7 +92,7 @@ namespace Contact_Manager_FL_MG_JW
             Controls.Add(dataGridView);
             Location = new Point(50, 650);
             Name = "Form_ViewAll";
-            Size = new Size(1350, 500);
+            Size = new Size(950, 360);
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

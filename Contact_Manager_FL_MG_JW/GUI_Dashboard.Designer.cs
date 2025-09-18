@@ -41,7 +41,7 @@
             // bttmCreateOnDash
             // 
             bttmCreateOnDash.Anchor = AnchorStyles.Top;
-            bttmCreateOnDash.Location = new Point(602, 283);
+            bttmCreateOnDash.Location = new Point(390, 185);
             bttmCreateOnDash.Margin = new Padding(4, 5, 4, 5);
             bttmCreateOnDash.Name = "bttmCreateOnDash";
             bttmCreateOnDash.Size = new Size(246, 97);
@@ -55,7 +55,7 @@
             lblTitel.Anchor = AnchorStyles.Top;
             lblTitel.AutoSize = true;
             lblTitel.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitel.Location = new Point(579, 157);
+            lblTitel.Location = new Point(367, 59);
             lblTitel.Margin = new Padding(4, 0, 4, 0);
             lblTitel.Name = "lblTitel";
             lblTitel.Size = new Size(309, 48);
@@ -65,7 +65,7 @@
             // BtnResetDB
             // 
             BtnResetDB.Anchor = AnchorStyles.Top;
-            BtnResetDB.Location = new Point(602, 410);
+            BtnResetDB.Location = new Point(390, 312);
             BtnResetDB.Margin = new Padding(4, 5, 4, 5);
             BtnResetDB.Name = "BtnResetDB";
             BtnResetDB.Size = new Size(246, 97);
@@ -77,7 +77,7 @@
             // bttnCsv
             // 
             bttnCsv.Anchor = AnchorStyles.Top;
-            bttnCsv.Location = new Point(602, 540);
+            bttnCsv.Location = new Point(390, 442);
             bttnCsv.Margin = new Padding(4, 5, 4, 5);
             bttnCsv.Name = "bttnCsv";
             bttnCsv.Size = new Size(246, 97);
@@ -92,7 +92,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
-            ClientSize = new Size(1378, 1344);
+            ClientSize = new Size(978, 944);
             Controls.Add(bttnCsv);
             Controls.Add(BtnResetDB);
             Controls.Add(lblTitel);
@@ -100,8 +100,8 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
-            MaximumSize = new Size(2599, 2591);
-            MinimumSize = new Size(1399, 1009);
+            MaximumSize = new Size(1400, 1400);
+            MinimumSize = new Size(950, 950);
             Name = "GUI_Dashboard";
             Text = "Contact Manager";
             ResumeLayout(false);
