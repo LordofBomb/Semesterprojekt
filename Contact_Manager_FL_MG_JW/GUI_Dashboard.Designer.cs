@@ -41,10 +41,9 @@
             // bttmCreateOnDash
             // 
             bttmCreateOnDash.Anchor = AnchorStyles.Top;
-            bttmCreateOnDash.Location = new Point(390, 185);
-            bttmCreateOnDash.Margin = new Padding(4, 5, 4, 5);
+            bttmCreateOnDash.Location = new Point(423, 111);
             bttmCreateOnDash.Name = "bttmCreateOnDash";
-            bttmCreateOnDash.Size = new Size(246, 97);
+            bttmCreateOnDash.Size = new Size(172, 58);
             bttmCreateOnDash.TabIndex = 0;
             bttmCreateOnDash.Text = "Neuer Kontakt erstellen";
             bttmCreateOnDash.UseVisualStyleBackColor = true;
@@ -55,20 +54,18 @@
             lblTitel.Anchor = AnchorStyles.Top;
             lblTitel.AutoSize = true;
             lblTitel.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitel.Location = new Point(367, 59);
-            lblTitel.Margin = new Padding(4, 0, 4, 0);
+            lblTitel.Location = new Point(407, 35);
             lblTitel.Name = "lblTitel";
-            lblTitel.Size = new Size(309, 48);
+            lblTitel.Size = new Size(211, 32);
             lblTitel.TabIndex = 1;
             lblTitel.Text = "Contact Manager";
             // 
             // BtnResetDB
             // 
             BtnResetDB.Anchor = AnchorStyles.Top;
-            BtnResetDB.Location = new Point(390, 312);
-            BtnResetDB.Margin = new Padding(4, 5, 4, 5);
+            BtnResetDB.Location = new Point(423, 187);
             BtnResetDB.Name = "BtnResetDB";
-            BtnResetDB.Size = new Size(246, 97);
+            BtnResetDB.Size = new Size(172, 58);
             BtnResetDB.TabIndex = 2;
             BtnResetDB.Text = "Datenbank zurücksetzten";
             BtnResetDB.UseVisualStyleBackColor = true;
@@ -77,10 +74,9 @@
             // bttnCsv
             // 
             bttnCsv.Anchor = AnchorStyles.Top;
-            bttnCsv.Location = new Point(390, 442);
-            bttnCsv.Margin = new Padding(4, 5, 4, 5);
+            bttnCsv.Location = new Point(423, 265);
             bttnCsv.Name = "bttnCsv";
-            bttnCsv.Size = new Size(246, 97);
+            bttnCsv.Size = new Size(172, 58);
             bttnCsv.TabIndex = 3;
             bttnCsv.Text = "CSV import";
             bttnCsv.UseVisualStyleBackColor = true;
@@ -88,20 +84,19 @@
             // 
             // GUI_Dashboard
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
-            ClientSize = new Size(978, 944);
+            ClientSize = new Size(984, 961);
             Controls.Add(bttnCsv);
             Controls.Add(BtnResetDB);
             Controls.Add(lblTitel);
             Controls.Add(bttmCreateOnDash);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
             MaximumSize = new Size(1400, 1400);
-            MinimumSize = new Size(950, 950);
+            MinimumSize = new Size(955, 955);
             Name = "GUI_Dashboard";
             Text = "Contact Manager";
             ResumeLayout(false);
