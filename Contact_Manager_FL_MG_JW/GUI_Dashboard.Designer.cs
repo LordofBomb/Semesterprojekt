@@ -39,10 +39,9 @@
             // bttmCreateOnDash
             // 
             bttmCreateOnDash.Anchor = AnchorStyles.Top;
-            bttmCreateOnDash.Location = new Point(605, 282);
-            bttmCreateOnDash.Margin = new Padding(4, 5, 4, 5);
+            bttmCreateOnDash.Location = new Point(632, 169);
             bttmCreateOnDash.Name = "bttmCreateOnDash";
-            bttmCreateOnDash.Size = new Size(246, 98);
+            bttmCreateOnDash.Size = new Size(172, 59);
             bttmCreateOnDash.TabIndex = 0;
             bttmCreateOnDash.Text = "Neuer Kontakt erstellen";
             bttmCreateOnDash.UseVisualStyleBackColor = true;
@@ -53,20 +52,18 @@
             lblTitel.Anchor = AnchorStyles.Top;
             lblTitel.AutoSize = true;
             lblTitel.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitel.Location = new Point(582, 156);
-            lblTitel.Margin = new Padding(4, 0, 4, 0);
+            lblTitel.Location = new Point(615, 94);
             lblTitel.Name = "lblTitel";
-            lblTitel.Size = new Size(309, 48);
+            lblTitel.Size = new Size(211, 32);
             lblTitel.TabIndex = 1;
             lblTitel.Text = "Contact Manager";
             // 
             // BtnResetDB
             // 
             BtnResetDB.Anchor = AnchorStyles.Top;
-            BtnResetDB.Location = new Point(605, 416);
-            BtnResetDB.Margin = new Padding(4, 5, 4, 5);
+            BtnResetDB.Location = new Point(632, 250);
             BtnResetDB.Name = "BtnResetDB";
-            BtnResetDB.Size = new Size(246, 98);
+            BtnResetDB.Size = new Size(172, 59);
             BtnResetDB.TabIndex = 2;
             BtnResetDB.Text = "Datenbank zurücksetzten";
             BtnResetDB.UseVisualStyleBackColor = true;
@@ -74,19 +71,18 @@
             // 
             // GUI_Dashboard
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
-            ClientSize = new Size(1378, 1344);
+            ClientSize = new Size(1384, 1361);
             Controls.Add(BtnResetDB);
             Controls.Add(lblTitel);
             Controls.Add(bttmCreateOnDash);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
-            MaximumSize = new Size(2600, 2600);
-            MinimumSize = new Size(1400, 1400);
+            MaximumSize = new Size(1825, 1576);
+            MinimumSize = new Size(985, 854);
             Name = "GUI_Dashboard";
             Text = "Contact Manager";
             ResumeLayout(false);
