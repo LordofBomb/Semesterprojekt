@@ -13,11 +13,11 @@ namespace Contact_Manager_FL_MG_JW
 
 
             viewAllPanel = new Form_ViewAll();
-            viewAllPanel.Location = new Point(250, 600);
+            viewAllPanel.Location = new Point(25, 550);
             viewAllPanel.Anchor = AnchorStyles.Top;
             Controls.Add(viewAllPanel);
         }
-        
+
         private void bttmCreateOnDash_Click(object sender, EventArgs e)
         {
             GUI_Create createForm = new GUI_Create(); // Neues Fenster erzeugen
@@ -50,5 +50,42 @@ namespace Contact_Manager_FL_MG_JW
                 }
             }
         }
+
+        private void bttnCsv_Click(object? sender, EventArgs e)
+        {
+            using var ofd = new OpenFileDialog
+            {
+                Title = "CSV-Datei wählen",
+                Filter = "CSV-Dateien (*.csv)|*.csv|Alle Dateien (*.*)|*.*",
+                Multiselect = false
+            };
+            if (ofd.ShowDialog(this) != DialogResult.OK) return;
+
+            try
+            {
+                var importer = new CsvImporter("Data Source=contactManagerDB.db;Version=3;");
+                var result = importer.Import(ofd.FileName);
+
+                var msg =
+                    $"Import abgeschlossen:\n" +
+                    $"- Global: {result.InsertedGlobal}\n" +
+                    $"- Kunden: {result.InsertedKunden}\n" +
+                    $"- Mitarbeiter: {result.InsertedMitarbeiter}\n" +
+                    $"- Lernende: {result.InsertedLernende}\n" +
+                    $"- Uebersprungen: {result.Skipped}";
+
+                if (result.Errors.Count > 0)
+                    msg += $"\n\nHinweise:\n- " + string.Join("\n- ", result.Errors.Take(5));
+
+                MessageBox.Show(msg, "CSV-Import", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Fehler beim Import: {ex.Message}", "Fehler",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }
