@@ -93,6 +93,8 @@
             txtbWhYearsOfAppr = new TextBox();
             lblWhYearsOfAppr = new Label();
             groupBoxCustomer = new GroupBox();
+            textBox1 = new TextBox();
+            label3 = new Label();
             TxtbNote = new TextBox();
             LblNote = new Label();
             TxtbCoPlace = new TextBox();
@@ -110,7 +112,6 @@
             BtnSave = new Button();
             BtnDelete = new Button();
             btnExportCsv = new Button();
-            label3 = new Label();
             label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)nudEmpLevel).BeginInit();
             groupBoxCustomer.SuspendLayout();
@@ -359,7 +360,7 @@
             // 
             // txtbCoName
             // 
-            txtbCoName.Location = new Point(529, 72);
+            txtbCoName.Location = new Point(529, 103);
             txtbCoName.Name = "txtbCoName";
             txtbCoName.Size = new Size(200, 23);
             txtbCoName.TabIndex = 270;
@@ -367,7 +368,7 @@
             // lblCoName
             // 
             lblCoName.AutoSize = true;
-            lblCoName.Location = new Point(439, 75);
+            lblCoName.Location = new Point(439, 106);
             lblCoName.Name = "lblCoName";
             lblCoName.Size = new Size(89, 15);
             lblCoName.TabIndex = 25;
@@ -375,7 +376,7 @@
             // 
             // txtbCoAddresse
             // 
-            txtbCoAddresse.Location = new Point(529, 101);
+            txtbCoAddresse.Location = new Point(529, 132);
             txtbCoAddresse.Name = "txtbCoAddresse";
             txtbCoAddresse.Size = new Size(200, 23);
             txtbCoAddresse.TabIndex = 280;
@@ -383,7 +384,7 @@
             // lblCoAddresse
             // 
             lblCoAddresse.AutoSize = true;
-            lblCoAddresse.Location = new Point(423, 104);
+            lblCoAddresse.Location = new Point(423, 135);
             lblCoAddresse.Name = "lblCoAddresse";
             lblCoAddresse.Size = new Size(105, 15);
             lblCoAddresse.TabIndex = 27;
@@ -392,7 +393,7 @@
             // lblCoPhoneNr
             // 
             lblCoPhoneNr.AutoSize = true;
-            lblCoPhoneNr.Location = new Point(416, 133);
+            lblCoPhoneNr.Location = new Point(416, 164);
             lblCoPhoneNr.Name = "lblCoPhoneNr";
             lblCoPhoneNr.Size = new Size(112, 15);
             lblCoPhoneNr.TabIndex = 28;
@@ -400,7 +401,7 @@
             // 
             // txtbCoPhoneNr
             // 
-            txtbCoPhoneNr.Location = new Point(529, 130);
+            txtbCoPhoneNr.Location = new Point(529, 161);
             txtbCoPhoneNr.Name = "txtbCoPhoneNr";
             txtbCoPhoneNr.Size = new Size(200, 23);
             txtbCoPhoneNr.TabIndex = 290;
@@ -707,6 +708,7 @@
             // 
             groupBoxCustomer.Anchor = AnchorStyles.Top;
             groupBoxCustomer.BackColor = Color.Transparent;
+            groupBoxCustomer.Controls.Add(textBox1);
             groupBoxCustomer.Controls.Add(label3);
             groupBoxCustomer.Controls.Add(TxtbNote);
             groupBoxCustomer.Controls.Add(LblNote);
@@ -734,6 +736,26 @@
             groupBoxCustomer.Size = new Size(749, 314);
             groupBoxCustomer.TabIndex = 191;
             groupBoxCustomer.TabStop = false;
+            // 
+            // textBox1
+            // 
+            textBox1.BorderStyle = BorderStyle.None;
+            textBox1.Enabled = false;
+            textBox1.Location = new Point(529, 16);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(201, 78);
+            textBox1.TabIndex = 298;
+            textBox1.Text = "Typ A: Grosskunde (Geschäft)\r\nTyp B: Mittelgrosskunde (Geschäft)\r\nTyp C: KMU\r\nTyp D: Premium Privatkunde\r\nTyp E: Privatkunde";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(212, 39);
+            label3.Name = "label3";
+            label3.Size = new Size(73, 15);
+            label3.TabIndex = 297;
+            label3.Text = "Kundentyp:*";
             // 
             // TxtbNote
             // 
@@ -927,15 +949,6 @@
             btnExportCsv.Visible = false;
             btnExportCsv.Click += btnExportCsv_Click;
             // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(212, 39);
-            label3.Name = "label3";
-            label3.Size = new Size(73, 15);
-            label3.TabIndex = 297;
-            label3.Text = "Kundentyp:*";
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -952,7 +965,6 @@
             AutoSize = true;
             ClientSize = new Size(969, 762);
             Controls.Add(label4);
-            Controls.Add(groupBoxEmployee);
             Controls.Add(btnExportCsv);
             Controls.Add(BtnDelete);
             Controls.Add(rbttEmployee);
@@ -975,6 +987,7 @@
             Controls.Add(txtbTitel);
             Controls.Add(BtnSave);
             Controls.Add(groupBoxCustomer);
+            Controls.Add(groupBoxEmployee);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MaximumSize = new Size(1825, 1576);
@@ -1078,5 +1091,6 @@
         internal TextBox TxtbNote;
         private Label label3;
         private Label label4;
+        private TextBox textBox1;
     }
 }

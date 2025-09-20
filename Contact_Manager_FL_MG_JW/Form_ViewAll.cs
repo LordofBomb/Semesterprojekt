@@ -142,117 +142,134 @@ namespace Contact_Manager_FL_MG_JW
             using (var connection = new SQLiteConnection($"Data Source={dbPfad};Version=3;"))
             {
                 connection.Open();
+                if (e.RowIndex < 0 || dataGridView.Rows[e.RowIndex].IsNewRow) return;
 
-                string sql = "SELECT \r\n    g.*,\r\n    m.strasse AS mitarbeiter_strasse,\r\n    m.PLZ AS mitarbeiter_PLZ,\r\n    m.Ort AS mitarbeiter_Ort,\r\n    m.*,\r\n    l.*,\r\n    k.strasse AS kunde_strasse,\r\n    k.PLZ AS kunde_PLZ,\r\n    k.Ort AS kunde_Ort,\r\n    k.* \r\nFROM Global g\r\nLEFT JOIN Mitarbeiter m ON g.globalid = m.globalid\r\nLEFT JOIN Lernender l ON m.globalid = l.globalid\r\nLEFT JOIN Kunde k ON g.globalid = k.globalid;\r\n";
+                string globalId = dataGridView.Rows[e.RowIndex].Cells["globalid"].Value?.ToString();
+                if (string.IsNullOrEmpty(globalId)) return;
+                
+                string sql = @"
+                                SELECT g.*,
+                                       m.strasse AS mitarbeiter_strasse,
+                                       m.PLZ AS mitarbeiter_PLZ,
+                                       m.Ort AS mitarbeiter_Ort,
+                                       m.*,
+                                       l.*,
+                                       k.strasse AS kunde_strasse,
+                                       k.PLZ AS kunde_PLZ,
+                                       k.Ort AS kunde_Ort,
+                                       k.*
+                                FROM Global g
+                                LEFT JOIN Mitarbeiter m ON g.globalid = m.globalid
+                                LEFT JOIN Lernender l ON m.globalid = l.globalid
+                                LEFT JOIN Kunde k ON g.globalid = k.globalid
+                                WHERE g.globalid = @id;";
 
 
-                using (var command = new SQLiteCommand(sql, connection))
+                using (var cmd = new SQLiteCommand(sql, connection))
                 {
-
-                    using (var adapter = new SQLiteDataAdapter(command))
+                    cmd.Parameters.AddWithValue("@id", globalId);
+                    using (var adapter = new SQLiteDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
+                        if (dt.Rows.Count == 0) return;
 
-                        if (e.RowIndex >= 0)
+                        var row = dt.Rows[0]; // nur 1 Ergebnis
+                        var bearbeitenFormular = new GUI_Create();
+                        bearbeitenFormular.BtnSave.Text = "Eintrag Aktualisieren";
+
+
+                        if (!row.IsNull("mitarbeiternummer"))
                         {
-                            var row = dt.Rows[e.RowIndex];
-                            var bearbeitenFormular = new GUI_Create();
-                            bearbeitenFormular.BtnSave.Text = "Eintrag Aktualisieren";
+                            bearbeitenFormular.rbttCustomer.Enabled = false;
+                            bearbeitenFormular.rbttEmployee.Checked = true;
+                            bearbeitenFormular.lblEmpNrOut.Text = row.Field<string>("Mitarbeiternummer");
+                            bearbeitenFormular.txtbAHVNr.Text = row.Field<string>("ahvnummer");
+                            bearbeitenFormular.txtbEmpStreet.Text = row.Field<string>("mitarbeiter_strasse");
+                            bearbeitenFormular.txtbEmpPlz.Text = row.Field<string>("mitarbeiter_plz");
+                            bearbeitenFormular.txtbEmpPlace.Text = row.Field<string>("mitarbeiter_ort");
+                            bearbeitenFormular.txtbMoPhone.Text = row.Field<string>("Handynummer");
+                            bearbeitenFormular.txtbNationality.Text = row.Field<string>("nationalität");
+                            bearbeitenFormular.ddbLoAddress.Text = row.Field<string>("Standort");
+                            var s = row.Field<string>("Eintrittsdatum");
+                            DateTime eintritt;
+                            var deCH = CultureInfo.GetCultureInfo("de-CH");
+                            var formats = new[] { "yyyy-MM-dd", "dd.MM.yyyy", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ss.fff" };
 
+                            bool ok = !string.IsNullOrWhiteSpace(s) &&
+                                      (DateTime.TryParseExact(s, formats, deCH, DateTimeStyles.AssumeLocal, out eintritt)
+                                       || DateTime.TryParse(s, deCH, DateTimeStyles.AssumeLocal, out eintritt));
 
-                            if (!row.IsNull("mitarbeiternummer"))
+                            bearbeitenFormular.txtbIntPhNr.Text = row.Field<string>("telefonnummerintern");
+                            bearbeitenFormular.dtpExitDate.Value = DateTime.Parse(row.Field<string>("Austrittsdatum"));
+                            bearbeitenFormular.ddbCadreLvl.Text = row.Field<string>("Kaderstufe");
+                            bearbeitenFormular.ddbDepartment.Text = row.Field<string>("Abteilung");
+                            bearbeitenFormular.txtbRole.Text = row.Field<string>("Tätigkeitsbezeichnung");
+                            bearbeitenFormular.nudEmpLevel.Text = row.Field<long>("Beschäftigungsgrad").ToString();
+
+                            if (!row.IsNull("globalid") &&
+                                (!row.IsNull("lehrjahre") || !row.IsNull("aktuelleslehrjahr")))
                             {
-                                bearbeitenFormular.rbttCustomer.Enabled = false;
-                                bearbeitenFormular.rbttEmployee.Checked = true;
-                                bearbeitenFormular.lblEmpNrOut.Text = row.Field<string>("Mitarbeiternummer");
-                                bearbeitenFormular.txtbAHVNr.Text = row.Field<string>("ahvnummer");
-                                bearbeitenFormular.txtbEmpStreet.Text = row.Field<string>("mitarbeiter_strasse");
-                                bearbeitenFormular.txtbEmpPlz.Text = row.Field<string>("mitarbeiter_plz");
-                                bearbeitenFormular.txtbEmpPlace.Text = row.Field<string>("mitarbeiter_ort");
-                                bearbeitenFormular.txtbMoPhone.Text = row.Field<string>("Handynummer");
-                                bearbeitenFormular.txtbNationality.Text = row.Field<string>("nationalität");
-                                bearbeitenFormular.ddbLoAddress.Text = row.Field<string>("Standort");
-                                var s = row.Field<string>("Eintrittsdatum");
-                                DateTime eintritt;
-                                var deCH = CultureInfo.GetCultureInfo("de-CH");
-                                var formats = new[] { "yyyy-MM-dd", "dd.MM.yyyy", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ss.fff" };
+                                bearbeitenFormular.ChbTrainee.Checked = true;
 
-                                bool ok = !string.IsNullOrWhiteSpace(s) &&
-                                          (DateTime.TryParseExact(s, formats, deCH, DateTimeStyles.AssumeLocal, out eintritt)
-                                           || DateTime.TryParse(s, deCH, DateTimeStyles.AssumeLocal, out eintritt));
-
-                                bearbeitenFormular.txtbIntPhNr.Text = row.Field<string>("telefonnummerintern");
-                                bearbeitenFormular.dtpExitDate.Value = DateTime.Parse(row.Field<string>("Austrittsdatum"));
-                                bearbeitenFormular.ddbCadreLvl.Text = row.Field<string>("Kaderstufe");
-                                bearbeitenFormular.ddbDepartment.Text = row.Field<string>("Abteilung");
-                                bearbeitenFormular.txtbRole.Text = row.Field<string>("Tätigkeitsbezeichnung");
-                                bearbeitenFormular.nudEmpLevel.Text = row.Field<long>("Beschäftigungsgrad").ToString();
-
-                                if (!row.IsNull("globalid") &&
-                                    (!row.IsNull("lehrjahre") || !row.IsNull("aktuelleslehrjahr")))
-                                {
-                                    bearbeitenFormular.ChbTrainee.Checked = true;
-
-                                    bearbeitenFormular.txtbNrOfYearsOfAppr.Text = row.Field<string>("lehrjahre") ?? "";
-                                    bearbeitenFormular.txtbWhYearsOfAppr.Text = row.Field<string>("aktuelleslehrjahr") ?? "";
-                                }
+                                bearbeitenFormular.txtbNrOfYearsOfAppr.Text = row.Field<string>("lehrjahre") ?? "";
+                                bearbeitenFormular.txtbWhYearsOfAppr.Text = row.Field<string>("aktuelleslehrjahr") ?? "";
                             }
-                            else if (!row.IsNull("kundentyp"))
-                            {
-
-
-                                bearbeitenFormular.rbttCustomer.Checked = true;
-                                bearbeitenFormular.rbttEmployee.Enabled = false;
-                                string kundentyp = row.Field<string>("kundentyp");
-                                switch (kundentyp)
-                                {
-                                    case "A":
-                                        bearbeitenFormular.rbttKtA.Checked = true;
-                                        break;
-                                    case "B":
-                                        bearbeitenFormular.rbttKtB.Checked = true;
-                                        break;
-                                    case "C":
-                                        bearbeitenFormular.rbttKtC.Checked = true;
-                                        break;
-                                    case "D":
-                                        bearbeitenFormular.rbttKtD.Checked = true;
-                                        break;
-                                    case "E":
-                                        bearbeitenFormular.rbttKtE.Checked = true;
-                                        break;
-                                }
-
-                                bearbeitenFormular.txtbCoName.Text = row.Field<string>("firmenname");
-                                bearbeitenFormular.txtbCoAddresse.Text = row.Field<string>("geschäftsadresse");
-                                bearbeitenFormular.txtbCoPhoneNr.Text = row.Field<string>("geschäftsnummer");
-
-                                bearbeitenFormular.txtbPrStreet.Text = row.Field<string>("kunde_strasse");
-                                bearbeitenFormular.txtprplz.Text = row.Field<string>("kunde_plz");
-                                bearbeitenFormular.TxtbCoPlace.Text = row.Field<string>("kunde_ort");
-                                bearbeitenFormular.txtbPrPhone.Text = row.Field<string>("telefon");
-                                bearbeitenFormular.TxtbNote.Text = row.Field<string>("note");
-                            }
-                            bearbeitenFormular.txtbFirstName.Text = row.Field<string>("Vorname");
-                            bearbeitenFormular.txtbLastName.Text = row.Field<string>("Name");
-                            bearbeitenFormular.ddlSalutation.Text = row.Field<string>("Anrede");
-                            bearbeitenFormular.txtbTitel.Text = row.Field<string>("Titel");
-                            bearbeitenFormular.ddlGender.Text = row.Field<string>("Geschlecht");
-                            bearbeitenFormular.txtbEMail.Text = row.Field<string>("E-Mail");
-                            if (row.Field<string>("Geburtstag") != null)
-                            {
-                                bearbeitenFormular.dtpBirthday.Value = DateTime.Parse(row.Field<string>("Geburtstag"));
-                            }
-                            bearbeitenFormular.ddbStatus.Text = row.Field<string>("Status");
-                            bearbeitenFormular.Tag = row.Field<long>("globalid").ToString();
-
-                            bearbeitenFormular.BtnDelete.Visible = true;
-                            bearbeitenFormular.btnExportCsv.Visible = true;
-                            bearbeitenFormular.Show();
-
-                            LadeDatenDashboard();
                         }
+                        else if (!row.IsNull("kundentyp"))
+                        {
+
+
+                            bearbeitenFormular.rbttCustomer.Checked = true;
+                            bearbeitenFormular.rbttEmployee.Enabled = false;
+                            string kundentyp = row.Field<string>("kundentyp");
+                            switch (kundentyp)
+                            {
+                                case "A":
+                                    bearbeitenFormular.rbttKtA.Checked = true;
+                                    break;
+                                case "B":
+                                    bearbeitenFormular.rbttKtB.Checked = true;
+                                    break;
+                                case "C":
+                                    bearbeitenFormular.rbttKtC.Checked = true;
+                                    break;
+                                case "D":
+                                    bearbeitenFormular.rbttKtD.Checked = true;
+                                    break;
+                                case "E":
+                                    bearbeitenFormular.rbttKtE.Checked = true;
+                                    break;
+                            }
+
+                            bearbeitenFormular.txtbCoName.Text = row.Field<string>("firmenname");
+                            bearbeitenFormular.txtbCoAddresse.Text = row.Field<string>("geschäftsadresse");
+                            bearbeitenFormular.txtbCoPhoneNr.Text = row.Field<string>("geschäftsnummer");
+
+                            bearbeitenFormular.txtbPrStreet.Text = row.Field<string>("kunde_strasse");
+                            bearbeitenFormular.txtprplz.Text = row.Field<string>("kunde_plz");
+                            bearbeitenFormular.TxtbCoPlace.Text = row.Field<string>("kunde_ort");
+                            bearbeitenFormular.txtbPrPhone.Text = row.Field<string>("telefon");
+                            bearbeitenFormular.TxtbNote.Text = row.Field<string>("note");
+                        }
+                        bearbeitenFormular.txtbFirstName.Text = row.Field<string>("Vorname");
+                        bearbeitenFormular.txtbLastName.Text = row.Field<string>("Name");
+                        bearbeitenFormular.ddlSalutation.Text = row.Field<string>("Anrede");
+                        bearbeitenFormular.txtbTitel.Text = row.Field<string>("Titel");
+                        bearbeitenFormular.ddlGender.Text = row.Field<string>("Geschlecht");
+                        bearbeitenFormular.txtbEMail.Text = row.Field<string>("E-Mail");
+                        if (row.Field<string>("Geburtstag") != null)
+                        {
+                            bearbeitenFormular.dtpBirthday.Value = DateTime.Parse(row.Field<string>("Geburtstag"));
+                        }
+                        bearbeitenFormular.ddbStatus.Text = row.Field<string>("Status");
+                        bearbeitenFormular.Tag = row.Field<long>("globalid").ToString();
+
+                        bearbeitenFormular.BtnDelete.Visible = true;
+                        bearbeitenFormular.btnExportCsv.Visible = true;
+                        bearbeitenFormular.Show();
+
+                        LadeDatenDashboard();
                     }
                 }
             }

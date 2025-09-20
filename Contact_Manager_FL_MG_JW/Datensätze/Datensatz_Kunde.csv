@@ -1,4 +1,4 @@
-﻿Accounttyp;Kundentyp;Firmenname;Anrede;Titel;Vorname;Name;Geschlecht;Geburtstag;E-Mail;Status;Firmennamen;Geschäftsadresse;Geschäftsnummer;Strasse;PLZ;Ort;Telefon;Eintrittsdatum;Austrittsdatum aktiv;Austrittsdatum
+﻿Accounttyp;Kundentyp;Firmenname;Anrede;Titel;Vorname;Name;Geschlecht;Geburtstag;E-Mail;Status;Firmennamen;Geschäftsadresse;Geschäftsnummer;Strasse (Kunde);PLZ  (Kunde);Ort  (Kunde);Telefon;Eintrittsdatum;Austrittsdatum aktiv;Austrittsdatum
 Kunde;A;ACME AG;Herr;;Lukas;Müller;Männlich;10.05.1985;lukas.mueller@acme.ch;aktiv;ACME AG;Bahnhofstrasse 1;044 123 45 67;Industriestrasse 10;8005;Zürich;044 765 43 21;18.09.2025;false;18.09.2025
 Kunde;C;Flora AG;Frau;;Sophie;Gärtner;Weiblich;30.08.1992;sophie.gaertner@flora.ch;aktiv;Flora Consulting AG;Wiesenstrasse 3;071 444 55 66;Wiesenstrasse 3;9000;St. Gallen;071 444 55 66;18.09.2025;false;18.09.2025
 Kunde;A;Alphatech;Herr;;Réne;Keller;Männlich;12.01.1980;rene.keller@alphatech.ch;aktiv;AlphaTech AG;Industriestrasse 99;041 888 77 66;Industriestrasse 100;6005;Luzern;041 888 77 66;18.09.2025;false;18.09.2025

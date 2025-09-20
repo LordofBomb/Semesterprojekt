@@ -172,6 +172,33 @@ namespace Contact_Manager_FL_MG_JW
                         }
                         else
                         {
+                            // Mitarbeiternummer aus CSV lesen
+                            string? mitarbeiternummerStr = FixUmlauts(Val(row, H, "Mitarbeiternummer"));
+
+                            object mitarbeiternummerParam;
+
+                            if (string.IsNullOrWhiteSpace(mitarbeiternummerStr))
+                            {
+                                // Neue Nummer aus DB holen (MAX+1)
+
+                                long nextMitarbNummer = 1;
+                                using (var cmdMax = new SQLiteCommand("SELECT IFNULL(MAX(mitarbeiternummer), 0) + 1 FROM Mitarbeiter", conn))
+                                {
+                                    object? result = cmdMax.ExecuteScalar();
+                                    if (result != null && result != DBNull.Value)
+                                        nextMitarbNummer = Convert.ToInt64(result);
+                                }
+
+                                mitarbeiternummerParam = nextMitarbNummer;
+                            }
+                            else
+                            {
+                                mitarbeiternummerParam = mitarbeiternummerStr;
+                            }
+
+
+
+
                             // --- Mitarbeiter ---
                             string? mitarbeiternummer = FixUmlauts(Val(row, H, "Mitarbeiternummer"));
                             string? strasse = FixUmlauts(Val(row, H, "Strasse (Mitarbeiter)", "Straße (Mitarbeiter)"));
@@ -193,8 +220,9 @@ namespace Contact_Manager_FL_MG_JW
                             string? taet = FixUmlauts(Val(row, H, "Taetigkeitsbezeichnung", "Tätigkeitsbezeichnung"));
                             string? telIn = Val(row, H, "TelefonnummerIntern", "TelIntern");
 
+
                             cmdInsMitarb.Parameters.Clear();
-                            cmdInsMitarb.Parameters.AddWithValue("@Mitarbeiternummer", mitarbeiternummer ?? (object?)DBNull.Value);
+                            cmdInsMitarb.Parameters.AddWithValue("@Mitarbeiternummer", mitarbeiternummerParam);
                             cmdInsMitarb.Parameters.AddWithValue("@eintritt", (object?)eintrittOut ?? DBNull.Value);
                             cmdInsMitarb.Parameters.AddWithValue("@strasse", strasse ?? (object)DBNull.Value);
                             cmdInsMitarb.Parameters.AddWithValue("@plz", plz ?? (object)DBNull.Value);
