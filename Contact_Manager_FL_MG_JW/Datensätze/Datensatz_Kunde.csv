@@ -1,0 +1,6 @@
+﻿Accounttyp;Kundentyp;Firmenname;Anrede;Titel;Vorname;Name;Geschlecht;Geburtstag;E-Mail;Status;Firmennamen;Geschäftsadresse;Geschäftsnummer;Strasse;PLZ;Ort;Telefon;Eintrittsdatum;Austrittsdatum aktiv;Austrittsdatum
+Kunde;A;ACME AG;Herr;;Lukas;Müller;Männlich;10.05.1985;lukas.mueller@acme.ch;aktiv;ACME AG;Bahnhofstrasse 1;044 123 45 67;Industriestrasse 10;8005;Zürich;044 765 43 21;18.09.2025;false;18.09.2025
+Kunde;C;Flora AG;Frau;;Sophie;Gärtner;Weiblich;30.08.1992;sophie.gaertner@flora.ch;aktiv;Flora Consulting AG;Wiesenstrasse 3;071 444 55 66;Wiesenstrasse 3;9000;St. Gallen;071 444 55 66;18.09.2025;false;18.09.2025
+Kunde;A;Alphatech;Herr;;Réne;Keller;Männlich;12.01.1980;rene.keller@alphatech.ch;aktiv;AlphaTech AG;Industriestrasse 99;041 888 77 66;Industriestrasse 100;6005;Luzern;041 888 77 66;18.09.2025;false;18.09.2025
+Kunde;D;Kunde;Frau;;Elena;Weber;Weiblich;24.06.1992;elena.weber@kunde.ch;aktiv;Weber AG;Industriestrasse 27, 9000 St. Gallen;+41 71 280 93 79;Industriestrasse 27;9000;St. Gallen;0765896541;18.09.2025;false;18.09.2025
+Kunde;E;Zeitraum AG;Herr;;Ali;Özdemir;Männlich;01.03.1990;ali.oezdemir@zeitraum.ch;aktiv;Zeitraum AG;Hauptstrasse 50;031 222 10 10;Hauptstrasse 50;3001;Bern;031 222 10 10;18.09.2025;false;18.09.2025
