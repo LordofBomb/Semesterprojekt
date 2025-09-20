@@ -113,7 +113,7 @@ namespace Contact_Manager_FL_MG_JW
                 string sql1 = "SELECT globalid, Accounttyp, Anrede, Titel, Vorname, Name, Geschlecht, `E-Mail`, CAST(Geburtstag AS TEXT) AS Geburtstag, Status FROM Global";
 
                 if (!string.IsNullOrWhiteSpace(filter1))
-                    sql1 += " WHERE Vorname LIKE @filter OR Name LIKE @filter OR `E-Mail` LIKE @filter";
+                    sql1 += " WHERE Vorname LIKE @filter OR Name LIKE @filter OR `E-Mail` LIKE @filter OR Geburtstag LIKE @filter";
 
                 using (var command1 = new SQLiteCommand(sql1, connection1))
                 {
