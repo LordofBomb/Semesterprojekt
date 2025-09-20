@@ -4,7 +4,7 @@ Dieses Programm wurde von Fabian Ledergerber, Mathias Gafner und Janik Wirz erst
 
 Funktionale Anforderungen sind alle eingebaut und funktionieren.
 
-Optionale funktionale Anforderungen haben wir "eine Dashboard-View die sinnvoll ist" und "Import von Kontakten im CSV-Format oder VCard-Format" eingebaut. Funktioniert beides, für Import haben wir folgende Datei vorbereitet: Datensatz_Kunde.csv und Datensatz_Mitarbeiter.csv
+Optionale funktionale Anforderungen haben wir "eine Dashboard-View die sinnvoll ist" und "Import von Kontakten im CSV-Format oder VCard-Format" eingebaut. Funktioniert beides, für den Import haben wir folgende Datei vorbereitet: Test_Datensatz.csv
 
 Specialfeature:
 Es ist auch möglich die Datensätze zu Exportieren.
