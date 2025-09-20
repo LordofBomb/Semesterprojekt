@@ -93,6 +93,8 @@
             txtbWhYearsOfAppr = new TextBox();
             lblWhYearsOfAppr = new Label();
             groupBoxCustomer = new GroupBox();
+            TxtbNote = new TextBox();
+            LblNote = new Label();
             TxtbCoPlace = new TextBox();
             LblCoPlace = new Label();
             txtprplz = new TextBox();
@@ -128,7 +130,7 @@
             lblTitel.AutoSize = true;
             lblTitel.Location = new Point(202, 95);
             lblTitel.Name = "lblTitel";
-            lblTitel.Size = new Size(33, 15);
+            lblTitel.Size = new Size(32, 15);
             lblTitel.TabIndex = 1;
             lblTitel.Text = "Titel:";
             // 
@@ -290,7 +292,7 @@
             rbttEmployee.Location = new Point(497, 215);
             rbttEmployee.Name = "rbttEmployee";
             rbttEmployee.Size = new Size(83, 19);
-            rbttEmployee.TabIndex = 190;
+            rbttEmployee.TabIndex = 181;
             rbttEmployee.TabStop = true;
             rbttEmployee.Text = "Mitarbeiter";
             rbttEmployee.UseVisualStyleBackColor = true;
@@ -427,7 +429,7 @@
             lblPrPhone.AutoSize = true;
             lblPrPhone.Location = new Point(13, 167);
             lblPrPhone.Name = "lblPrPhone";
-            lblPrPhone.Size = new Size(111, 15);
+            lblPrPhone.Size = new Size(110, 15);
             lblPrPhone.TabIndex = 33;
             lblPrPhone.Text = "Telefonnr/Handynr:";
             // 
@@ -461,7 +463,7 @@
             lblEmpNrOut.AutoSize = true;
             lblEmpNrOut.Location = new Point(168, 25);
             lblEmpNrOut.Name = "lblEmpNrOut";
-            lblEmpNrOut.Size = new Size(72, 15);
+            lblEmpNrOut.Size = new Size(85, 15);
             lblEmpNrOut.TabIndex = 37;
             lblEmpNrOut.Text = "xxxxxxxxxxxxx";
             // 
@@ -471,7 +473,7 @@
             dtphiringdate.MinDate = new DateTime(2024, 12, 31, 0, 0, 0, 0);
             dtphiringdate.Name = "dtphiringdate";
             dtphiringdate.Size = new Size(200, 23);
-            dtphiringdate.TabIndex = 270;
+            dtphiringdate.TabIndex = 260;
             // 
             // lblhiringdate
             // 
@@ -582,7 +584,7 @@
             ddbLoAddress.Location = new Point(548, 17);
             ddbLoAddress.Name = "ddbLoAddress";
             ddbLoAddress.Size = new Size(200, 23);
-            ddbLoAddress.TabIndex = 260;
+            ddbLoAddress.TabIndex = 250;
             // 
             // ddbDepartment
             // 
@@ -614,7 +616,7 @@
             lblRole.AutoSize = true;
             lblRole.Location = new Point(412, 207);
             lblRole.Name = "lblRole";
-            lblRole.Size = new Size(128, 15);
+            lblRole.Size = new Size(127, 15);
             lblRole.TabIndex = 58;
             lblRole.Text = "Tätigkeitsbezeichnung:";
             // 
@@ -643,14 +645,14 @@
             txtbIntPhNr.Location = new Point(548, 77);
             txtbIntPhNr.Name = "txtbIntPhNr";
             txtbIntPhNr.Size = new Size(200, 23);
-            txtbIntPhNr.TabIndex = 250;
+            txtbIntPhNr.TabIndex = 270;
             // 
             // lblIntPhNr
             // 
             lblIntPhNr.AutoSize = true;
             lblIntPhNr.Location = new Point(414, 80);
             lblIntPhNr.Name = "lblIntPhNr";
-            lblIntPhNr.Size = new Size(129, 15);
+            lblIntPhNr.Size = new Size(128, 15);
             lblIntPhNr.TabIndex = 63;
             lblIntPhNr.Text = "Telefonnummer Intern:";
             // 
@@ -701,13 +703,14 @@
             // 
             groupBoxCustomer.Anchor = AnchorStyles.Top;
             groupBoxCustomer.BackColor = Color.Transparent;
+            groupBoxCustomer.Controls.Add(TxtbNote);
+            groupBoxCustomer.Controls.Add(LblNote);
             groupBoxCustomer.Controls.Add(TxtbCoPlace);
             groupBoxCustomer.Controls.Add(LblCoPlace);
             groupBoxCustomer.Controls.Add(txtprplz);
             groupBoxCustomer.Controls.Add(label2);
             groupBoxCustomer.Controls.Add(lblCoName);
             groupBoxCustomer.Controls.Add(rbttKtA);
-            groupBoxCustomer.Controls.Add(rbttKtB);
             groupBoxCustomer.Controls.Add(rbttKtC);
             groupBoxCustomer.Controls.Add(rbttKtD);
             groupBoxCustomer.Controls.Add(rbttKtE);
@@ -720,18 +723,36 @@
             groupBoxCustomer.Controls.Add(lblPrAddress);
             groupBoxCustomer.Controls.Add(txtbPrPhone);
             groupBoxCustomer.Controls.Add(lblPrPhone);
+            groupBoxCustomer.Controls.Add(rbttKtB);
             groupBoxCustomer.Location = new Point(114, 331);
             groupBoxCustomer.Name = "groupBoxCustomer";
-            groupBoxCustomer.Size = new Size(749, 219);
-            groupBoxCustomer.TabIndex = 69;
+            groupBoxCustomer.Size = new Size(749, 314);
+            groupBoxCustomer.TabIndex = 191;
             groupBoxCustomer.TabStop = false;
+            // 
+            // TxtbNote
+            // 
+            TxtbNote.Location = new Point(129, 198);
+            TxtbNote.Multiline = true;
+            TxtbNote.Name = "TxtbNote";
+            TxtbNote.Size = new Size(201, 93);
+            TxtbNote.TabIndex = 296;
+            // 
+            // LblNote
+            // 
+            LblNote.AutoSize = true;
+            LblNote.Location = new Point(82, 201);
+            LblNote.Name = "LblNote";
+            LblNote.Size = new Size(38, 15);
+            LblNote.TabIndex = 295;
+            LblNote.Text = "Notiz:";
             // 
             // TxtbCoPlace
             // 
             TxtbCoPlace.Location = new Point(130, 130);
             TxtbCoPlace.Name = "TxtbCoPlace";
             TxtbCoPlace.Size = new Size(200, 23);
-            TxtbCoPlace.TabIndex = 294;
+            TxtbCoPlace.TabIndex = 254;
             // 
             // LblCoPlace
             // 
@@ -747,7 +768,7 @@
             txtprplz.Location = new Point(130, 101);
             txtprplz.Name = "txtprplz";
             txtprplz.Size = new Size(200, 23);
-            txtprplz.TabIndex = 292;
+            txtprplz.TabIndex = 252;
             // 
             // label2
             // 
@@ -799,7 +820,7 @@
             groupBoxEmployee.Location = new Point(90, 290);
             groupBoxEmployee.Name = "groupBoxEmployee";
             groupBoxEmployee.Size = new Size(800, 381);
-            groupBoxEmployee.TabIndex = 70;
+            groupBoxEmployee.TabIndex = 191;
             groupBoxEmployee.TabStop = false;
             // 
             // ChkbExitDate
@@ -808,7 +829,7 @@
             ChkbExitDate.Location = new Point(759, 114);
             ChkbExitDate.Name = "ChkbExitDate";
             ChkbExitDate.Size = new Size(15, 14);
-            ChkbExitDate.TabIndex = 335;
+            ChkbExitDate.TabIndex = 272;
             ChkbExitDate.UseVisualStyleBackColor = true;
             ChkbExitDate.CheckedChanged += ChkbExitDate_CheckedChanged;
             // 
@@ -826,7 +847,7 @@
             txtbEmpPlace.Location = new Point(168, 141);
             txtbEmpPlace.Name = "txtbEmpPlace";
             txtbEmpPlace.Size = new Size(200, 23);
-            txtbEmpPlace.TabIndex = 333;
+            txtbEmpPlace.TabIndex = 214;
             // 
             // LblEmpPlz
             // 
@@ -842,7 +863,7 @@
             txtbEmpPlz.Location = new Point(168, 109);
             txtbEmpPlz.Name = "txtbEmpPlz";
             txtbEmpPlz.Size = new Size(200, 23);
-            txtbEmpPlz.TabIndex = 331;
+            txtbEmpPlz.TabIndex = 212;
             // 
             // label1
             // 
@@ -871,7 +892,7 @@
             BtnSave.Location = new Point(114, 683);
             BtnSave.Name = "BtnSave";
             BtnSave.Size = new Size(235, 45);
-            BtnSave.TabIndex = 9000;
+            BtnSave.TabIndex = 900;
             BtnSave.Text = "Eintrag speichern";
             BtnSave.UseVisualStyleBackColor = true;
             BtnSave.Click += BtnSave_Click;
@@ -882,7 +903,7 @@
             BtnDelete.Location = new Point(643, 683);
             BtnDelete.Name = "BtnDelete";
             BtnDelete.Size = new Size(228, 45);
-            BtnDelete.TabIndex = 9001;
+            BtnDelete.TabIndex = 902;
             BtnDelete.Text = "Eintrag löschen";
             BtnDelete.UseVisualStyleBackColor = true;
             BtnDelete.Visible = false;
@@ -894,9 +915,10 @@
             btnExportCsv.Location = new Point(383, 683);
             btnExportCsv.Name = "btnExportCsv";
             btnExportCsv.Size = new Size(224, 45);
-            btnExportCsv.TabIndex = 9002;
+            btnExportCsv.TabIndex = 901;
             btnExportCsv.Text = "Daten Exportieren";
             btnExportCsv.UseVisualStyleBackColor = true;
+            btnExportCsv.Visible = false;
             btnExportCsv.Click += btnExportCsv_Click;
             // 
             // GUI_Create
@@ -904,15 +926,8 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-<<<<<<< HEAD
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(1378, 1344);
-            Controls.Add(groupBoxEmployee);
-=======
             ClientSize = new Size(969, 762);
             Controls.Add(btnExportCsv);
->>>>>>> e5d29e8e5173721f7e5a4a025e73b25c301dd531
-            Controls.Add(groupBoxCustomer);
             Controls.Add(BtnDelete);
             Controls.Add(rbttEmployee);
             Controls.Add(rbttCustomer);
@@ -933,6 +948,7 @@
             Controls.Add(lblTitel);
             Controls.Add(txtbTitel);
             Controls.Add(BtnSave);
+            Controls.Add(groupBoxCustomer);
             Controls.Add(groupBoxEmployee);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -1033,5 +1049,7 @@
         private CheckBox ChkbExitDate;
         internal Button BtnDelete;
         internal Button btnExportCsv;
+        internal Label LblNote;
+        internal TextBox TxtbNote;
     }
 }

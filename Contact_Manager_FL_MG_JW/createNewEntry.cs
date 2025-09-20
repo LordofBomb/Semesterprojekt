@@ -13,14 +13,12 @@ namespace Contact_Manager_FL_MG_JW
     {
         private GUI_Create gui;
 
-        public createNewEntry(GUI_Create guiForm)
+        public createNewEntry(GUI_Create guiForm) //übergabe aus der GUI_Create um auf Felder zugreifen zu können
         {
             gui = guiForm;
         }
 
-        private static DateTime? GetNullable(DateTimePicker dp) => dp.Checked ? dp.Value.Date : (DateTime?)null;
-
-        internal void CreatePerson(object sender, EventArgs e)
+        internal void CreatePerson(object sender, EventArgs e) //Funktion für das Eintragen der Daten in die SQLite Datenbank mit Validierungsprüfung der Pflichtfelder
         {
             string anrede = gui.ddlSalutation.Text;
             string titel = gui.txtbTitel.Text;
@@ -53,7 +51,6 @@ namespace Contact_Manager_FL_MG_JW
                         }
                     }
                     if (
-                        string.IsNullOrWhiteSpace(anrede) ||
                         string.IsNullOrWhiteSpace(vorname) ||
                         string.IsNullOrWhiteSpace(nachname) ||
                         string.IsNullOrWhiteSpace(geschlecht) ||
@@ -70,8 +67,7 @@ namespace Contact_Manager_FL_MG_JW
                 {
                     acctype = "Kunde";
 
-                    if (string.IsNullOrWhiteSpace(anrede) ||
-                        string.IsNullOrWhiteSpace(vorname) ||
+                    if (string.IsNullOrWhiteSpace(vorname) ||
                         string.IsNullOrWhiteSpace(nachname) ||
                         string.IsNullOrWhiteSpace(geschlecht) ||
                         string.IsNullOrWhiteSpace(geburtsdatum) ||
@@ -222,12 +218,13 @@ namespace Contact_Manager_FL_MG_JW
                         string PLZ = gui.txtprplz.Text;
                         string Ort = gui.TxtbCoPlace.Text;
                         string telefon = gui.txtbPrPhone.Text;
+                        string note = gui.TxtbNote.Text;
 
                         string updateKunde = @"
                         INSERT INTO Kunde 
-                        (kundentyp, firmenname, geschäftsadresse, geschäftsnummer, strasse, PLZ, Ort, telefon, globalid)
+                        (kundentyp, firmenname, geschäftsadresse, geschäftsnummer, strasse, PLZ, Ort, telefon, note, globalid)
                         VALUES 
-                        (@kundentyp, @firmenname, @geschaeftsadresse, @geschaeftsnummer, @strasse, @PLZ, @ort , @telefon, @globalid);";
+                        (@kundentyp, @firmenname, @geschaeftsadresse, @geschaeftsnummer, @strasse, @PLZ, @ort , @telefon, @note, @globalid);";
 
                         var cmdKunde = new SQLiteCommand(updateKunde, connection);
                         cmdKunde.Parameters.AddWithValue("@kundentyp", kundentyp);
@@ -236,8 +233,19 @@ namespace Contact_Manager_FL_MG_JW
                         cmdKunde.Parameters.AddWithValue("@geschaeftsnummer", geschaeftsnummer);
                         cmdKunde.Parameters.AddWithValue("@strasse", strasse);
                         cmdKunde.Parameters.AddWithValue("@PLZ", PLZ);
-                        cmdKunde.Parameters.AddWithValue("ort", Ort);
+                        cmdKunde.Parameters.AddWithValue("@ort", Ort);
                         cmdKunde.Parameters.AddWithValue("@telefon", telefon);
+                        if (!string.IsNullOrWhiteSpace(gui.TxtbNote.Text))
+                        {
+                            string datum = DateTime.Now.ToString("dd.MM.yyyy");
+                            string notiz = $"{Environment.NewLine}[{datum}] {gui.TxtbNote.Text}";
+                            cmdKunde.Parameters.AddWithValue("@note", notiz);
+                        }
+                        else
+                        {
+                            string notiz = "";
+                            cmdKunde.Parameters.AddWithValue("@note", notiz);
+                        }
                         cmdKunde.Parameters.AddWithValue("@globalid", globalId);
 
                         cmdKunde.ExecuteNonQuery();

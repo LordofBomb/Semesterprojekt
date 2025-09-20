@@ -18,12 +18,12 @@ namespace Contact_Manager_FL_MG_JW
     {
         private GUI_Create gui;
 
-        public UpdateEntry(GUI_Create guiForm)
+        public UpdateEntry(GUI_Create guiForm) //übernahme der GUI_Create.cs (verknüpfung)
         {
             gui = guiForm;
         }
 
-        internal void UpdatePerson(object sender, EventArgs e)
+        internal void UpdatePerson(object sender, EventArgs e) //Update Person Methode, welche erlaubt die bestehenden Einträge zu überschreiben, ohne neue zu erstellen.
         {
 
             string globalId = gui.Tag?.ToString();
@@ -159,7 +159,8 @@ namespace Contact_Manager_FL_MG_JW
                                                 strasse = @strasse,
                                                 PLZ = @PLZ,
                                                 Ort = @Ort,
-                                                telefon = @telefon
+                                                telefon = @telefon,
+                                                note = @note
                                             WHERE globalid = @globalid;
                                             ";
                         using (var command3 = new SQLiteCommand(sqlc, connection))
@@ -180,8 +181,18 @@ namespace Contact_Manager_FL_MG_JW
                             command3.Parameters.AddWithValue("@PLZ", gui.txtprplz.Text);
                             command3.Parameters.AddWithValue("@Ort", gui.TxtbCoPlace.Text);
                             command3.Parameters.AddWithValue("@telefon", gui.txtbPrPhone.Text);
+                            if (!string.IsNullOrWhiteSpace(gui.TxtbNote.Text))
+                            {
+                                string datum = DateTime.Now.ToString("dd.MM.yyyy");
+                                string notiz = $"{Environment.NewLine}[{datum}] {gui.TxtbNote.Text}";
+                                command3.Parameters.AddWithValue("@note", notiz);
+                            }
+                            else
+                            {
+                                string notiz = "";
+                                command3.Parameters.AddWithValue("@note", notiz);
+                            }
                             command3.Parameters.AddWithValue("@globalid", globalId);
-
                             command3.ExecuteNonQuery();
 
                         }
@@ -226,6 +237,8 @@ namespace Contact_Manager_FL_MG_JW
 
                 // Ignorieren:
                 if (control.Name == "lblEmpNrOut" || control is RadioButton)
+                    continue;
+                if (control.Name == "TxtbNote")
                     continue;
 
                 // TextBox prüfen

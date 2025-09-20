@@ -9,7 +9,7 @@ namespace Contact_Manager_FL_MG_JW
 {
     internal class createDBIfNotCreated
     {
-        public static void CreateDB()
+        public static void CreateDB() //Diese Funktion prüft ob bereits eine Datenbank existiert wenn das Programm gestartet wird, falls nicht wird die erforderliche Datenbank automatisch erstellt.
         {
             string dbPfad = Path.Combine(Application.StartupPath, "contactManagerDB.db");
 
@@ -50,6 +50,7 @@ namespace Contact_Manager_FL_MG_JW
                     PLZ TEXT,
                     Ort TEXT,
                     telefon TEXT,
+                    note TEXT,
                     globalid INTEGER,
                     FOREIGN KEY(globalid) REFERENCES Global(globalid) ON DELETE CASCADE
                     );";

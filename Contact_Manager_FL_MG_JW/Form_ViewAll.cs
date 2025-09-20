@@ -39,7 +39,7 @@ namespace Contact_Manager_FL_MG_JW
             // 
             txtSuche.Location = new Point(10, 14);
             txtSuche.Name = "txtSuche";
-            txtSuche.Size = new Size(487, 31);
+            txtSuche.Size = new Size(487, 23);
             txtSuche.TabIndex = 0;
             // 
             // btnSuche
@@ -61,7 +61,7 @@ namespace Contact_Manager_FL_MG_JW
             dataGridView.RowHeadersWidth = 62;
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView.Size = new Size(915, 300);
-            dataGridView.TabIndex = 2;
+            dataGridView.TabIndex = 4;
             dataGridView.CellDoubleClick += DataGridView_CellDoubleClick;
             // 
             // BtnOpen
@@ -69,7 +69,7 @@ namespace Contact_Manager_FL_MG_JW
             BtnOpen.Location = new Point(649, 9);
             BtnOpen.Name = "BtnOpen";
             BtnOpen.Size = new Size(140, 40);
-            BtnOpen.TabIndex = 3;
+            BtnOpen.TabIndex = 2;
             BtnOpen.Text = "Eintrag öffnen";
             BtnOpen.Click += BtnOpen_Click;
             // 
@@ -78,7 +78,7 @@ namespace Contact_Manager_FL_MG_JW
             BtnDeleteDash.Location = new Point(795, 9);
             BtnDeleteDash.Name = "BtnDeleteDash";
             BtnDeleteDash.Size = new Size(130, 40);
-            BtnDeleteDash.TabIndex = 4;
+            BtnDeleteDash.TabIndex = 3;
             BtnDeleteDash.Text = "Eintrag Löschen";
             BtnDeleteDash.Click += BtnDeleteDash_Click;
             // 
@@ -98,11 +98,12 @@ namespace Contact_Manager_FL_MG_JW
             PerformLayout();
         }
 
-        public void UpdateDashboard()
+        public void UpdateDashboard() //öffentlich zugängliche UpdateDashboard Methode
         {
             LadeDatenDashboard();
         }
-        private void LadeDatenDashboard(string filter1 = "")
+
+        private void LadeDatenDashboard(string filter1 = "") //Ladet die Daten im Dashboard neu aus der Datenbank (nur hier zugänglich)
         {
             string dbPfad1 = Path.Combine(Application.StartupPath, "contactManagerDB.db");
 
@@ -129,12 +130,12 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void BtnSuche_Click(object sender, EventArgs e)
+        private void BtnSuche_Click(object sender, EventArgs e) //Suchfunktion
         {
             LadeDatenDashboard(txtSuche.Text.Trim());
         }
 
-        private void DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e) //Doppelklick auf eintrag in der View öffnet den Eintrag
         {
             string dbPfad = Path.Combine(Application.StartupPath, "contactManagerDB.db");
 
@@ -142,7 +143,7 @@ namespace Contact_Manager_FL_MG_JW
             {
                 connection.Open();
 
-                string sql = "SELECT \r\n    g.*,\r\n    m.strasse AS mitarbeiter_strasse,\r\n    m.PLZ AS mitarbeiter_PLZ,\r\n    m.Ort AS mitarbeiter_Ort,\r\n    m.*,\r\n    l.*,\r\n    k.strasse AS kunde_strasse,\r\n    k.PLZ AS kunde_PLZ,\r\n    k.Ort AS kunde_Ort,\r\n    k.*\r\nFROM Global g\r\nLEFT JOIN Mitarbeiter m ON g.globalid = m.globalid\r\nLEFT JOIN Lernender l ON m.mitarbeiternummer = l.mitarbeiterID\r\nLEFT JOIN Kunde k ON g.globalid = k.globalid;\r\n";
+                string sql = "SELECT \r\n    g.*,\r\n    m.strasse AS mitarbeiter_strasse,\r\n    m.PLZ AS mitarbeiter_PLZ,\r\n    m.Ort AS mitarbeiter_Ort,\r\n    m.*,\r\n    l.*,\r\n    k.strasse AS kunde_strasse,\r\n    k.PLZ AS kunde_PLZ,\r\n    k.Ort AS kunde_Ort,\r\n    k.* \r\nFROM Global g\r\nLEFT JOIN Mitarbeiter m ON g.globalid = m.globalid\r\nLEFT JOIN Lernender l ON m.mitarbeiternummer = l.mitarbeiterID\r\nLEFT JOIN Kunde k ON g.globalid = k.globalid;\r\n";
 
 
                 using (var command = new SQLiteCommand(sql, connection))
@@ -229,6 +230,7 @@ namespace Contact_Manager_FL_MG_JW
                                 bearbeitenFormular.txtprplz.Text = row.Field<string>("kunde_plz");
                                 bearbeitenFormular.TxtbCoPlace.Text = row.Field<string>("kunde_ort");
                                 bearbeitenFormular.txtbPrPhone.Text = row.Field<string>("telefon");
+                                bearbeitenFormular.TxtbNote.Text = row.Field<string>("note");
                             }
                             bearbeitenFormular.txtbFirstName.Text = row.Field<string>("Vorname");
                             bearbeitenFormular.txtbLastName.Text = row.Field<string>("Name");
@@ -244,6 +246,7 @@ namespace Contact_Manager_FL_MG_JW
                             bearbeitenFormular.Tag = row.Field<long>("globalid").ToString();
 
                             bearbeitenFormular.BtnDelete.Visible = true;
+                            bearbeitenFormular.btnExportCsv.Visible = true;
                             bearbeitenFormular.Show();
 
                             LadeDatenDashboard();
@@ -253,7 +256,7 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void BtnOpen_Click(object sender, EventArgs e)
+        private void BtnOpen_Click(object sender, EventArgs e) //Button öffnet den aktuell ausgewählten Eintrag
         {
             if (dataGridView.SelectedRows.Count > 0)
             {
@@ -269,7 +272,7 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void BtnDeleteDash_Click(object sender, EventArgs e)
+        private void BtnDeleteDash_Click(object sender, EventArgs e) //Button löscht den aktuell ausgewählten Eintrag und stellt zur sicherheit eine Kontrollfrage ob wirklich gelöscht werden soll
         {
             if (dataGridView.SelectedRows.Count == 0)
             {

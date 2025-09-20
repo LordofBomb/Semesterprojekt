@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Contact_Manager_FL_MG_JW;
 using Microsoft.VisualBasic.FileIO;
 
 namespace Contact_Manager_FL_MG_JW
@@ -19,13 +20,10 @@ namespace Contact_Manager_FL_MG_JW
         public int Skipped { get; set; }
         public List<string> Errors { get; } = new List<string>();
     }
-
-    /// <summary>
-    /// CSV-Importer für Mitarbeiter und Geschäftskunden mit Auto-Erkennung.
-    /// - Schreibt immer zuerst einen Global-Datensatz.
-    /// - Entscheidet danach automatisch, ob Kunde oder Mitarbeiter angelegt wird.
-    /// - Optional: legt Lernender an, wenn entsprechende Spalten vorhanden sind.
-    /// </summary>
+    // CSV-Importer für Mitarbeiter und Geschäftskunden mit Auto-Erkennung.
+    // - Schreibt immer zuerst einen Global-Datensatz.
+    // - Entscheidet danach automatisch, ob Kunde oder Mitarbeiter angelegt wird.
+    // - Optional: legt beim  Mitarbeiter, Lernender an, wenn entsprechende Spalten vorhanden sind.
     public sealed class CsvImporter
     {
         private readonly string _connectionString;
@@ -50,15 +48,18 @@ namespace Contact_Manager_FL_MG_JW
 
             using var tx = conn.BeginTransaction();
 
+            //SQL Statement für die Globaltabelle
             using var cmdInsGlobal = new SQLiteCommand(@"
                 INSERT INTO Global (Anrede, Titel, Vorname, Name, Geschlecht, `E-Mail`, Geburtstag, Status, Accounttyp)
                 VALUES (@Anrede, @Titel, @Vorname, @Name, @Geschlecht, @Email, @Geburtstag, @Status, @Accounttyp);
                 SELECT last_insert_rowid();", conn, tx);
 
+            //SQL Statement für die Kundentabelle
             using var cmdInsKunde = new SQLiteCommand(@"
-                INSERT INTO Kunde (kundentyp, firmenname, `geschäftsadresse`, `geschäftsnummer`, strasse, PLZ, Ort, telefon, globalid)
-                VALUES (@kundentyp, @firmenname, @geschaeftsadresse, @geschaeftsnummer, @strasse, @plz, @ort, @telefon, @globalid);", conn, tx);
+                INSERT INTO Kunde (kundentyp, firmenname, `geschäftsadresse`, `geschäftsnummer`, strasse, PLZ, Ort, telefon, Note, globalid)
+                VALUES (@kundentyp, @firmenname, @geschaeftsadresse, @geschaeftsnummer, @strasse, @plz, @ort, @telefon, @Note, @globalid);", conn, tx);
 
+            //SQL Statement für die Mitarbeitertabelle
             using var cmdInsMitarb = new SQLiteCommand(@"
                 INSERT INTO Mitarbeiter (
                     eintrittsdatum, strasse, PLZ, Ort, handynummer, beschäftigungsgrad, abteilung, kaderstufe,
@@ -69,6 +70,7 @@ namespace Contact_Manager_FL_MG_JW
                 );
                 SELECT last_insert_rowid();", conn, tx);
 
+            //SQL Statement für die Lernender Tabelle
             using var cmdInsLernender = new SQLiteCommand(@"
                 INSERT INTO Lernender (lehrjahre, aktuelleslehrjahr, mitarbeiterid)
                 VALUES (@lehrjahre, @aktuelles, @mitarbId);", conn, tx);
@@ -146,11 +148,12 @@ namespace Contact_Manager_FL_MG_JW
                         if (looksKunde && !looksMitarb)
                         {
                             // --- Kunde ---
-                            string? strasse = FixUmlauts(Val(row, H, "Strasse", "Straße"));
-                            string? plz = Val(row, H, "PLZ");
-                            string? ort = FixUmlauts(Val(row, H, "Ort"));
-                            string? tel = Val(row, H, "Telefon", "Telefonnummer");
+                            string? strasse = FixUmlauts(Val(row, H, "Strasse (Kunde)", "Straße (Kunde)"));
+                            string? plz = Val(row, H, "PLZ (Kunde)");
+                            string? ort = FixUmlauts(Val(row, H, "Ort (Kunde)"));
+                            string? tel = Val(row, H, "Telefon", "Telefonnummer", "Telefonnr/Handynr (Kunde)");
                             string? kundentyp = FixUmlauts(Val(row, H, "Kundentyp")) ?? "Geschaeftskunde";
+                            string? notiz = Environment.NewLine + FixUmlauts(Val(row, H,"Notiz"));
 
                             cmdInsKunde.Parameters.Clear();
                             cmdInsKunde.Parameters.AddWithValue("@kundentyp", kundentyp ?? (object)DBNull.Value);
@@ -161,6 +164,7 @@ namespace Contact_Manager_FL_MG_JW
                             cmdInsKunde.Parameters.AddWithValue("@plz", plz ?? (object)DBNull.Value);
                             cmdInsKunde.Parameters.AddWithValue("@ort", ort ?? (object)DBNull.Value);
                             cmdInsKunde.Parameters.AddWithValue("@telefon", tel ?? (object)DBNull.Value);
+                            cmdInsKunde.Parameters.AddWithValue("@Note", notiz ?? (object)DBNull.Value);
                             cmdInsKunde.Parameters.AddWithValue("@globalid", globalId);
                             cmdInsKunde.ExecuteNonQuery();
 

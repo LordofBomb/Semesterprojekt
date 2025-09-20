@@ -18,14 +18,14 @@ namespace Contact_Manager_FL_MG_JW
             Controls.Add(viewAllPanel);
         }
 
-        private void bttmCreateOnDash_Click(object sender, EventArgs e)
+        private void bttmCreateOnDash_Click(object sender, EventArgs e) //Erzeugt neues Fenster um einen neuen Eintrag in die Datenbank machen zu können.
         {
             GUI_Create createForm = new GUI_Create(); // Neues Fenster erzeugen
             createForm.Show(); // Fenster anzeigen (nicht modal)
         }
 
 
-        private void BtnResetDB_Click(object sender, EventArgs e)
+        private void BtnResetDB_Click(object sender, EventArgs e) //Button um die Datenbank zurücksetzten zu können, alle Einträge werden gelöscht und die Ids auf 0 gesetzt.
         {
             DialogResult result = MessageBox.Show("Willst du die Datenbank wirklich zurücksetzten? Alle bisher gespeicherten Daten gehen unwiderruflich verloren!", "Warnung", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -51,7 +51,7 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void bttnCsv_Click(object? sender, EventArgs e)
+        private void bttnCsv_Click(object? sender, EventArgs e) //CSV import Button, dieser öffnet eine Instanz der CSVImport.cs und importiert die Einträge einer CSV Datei in die Datenbank, aktuell werden da Fehlerhafte CSV Daten noch nicht abgefangen.
         {
             using var ofd = new OpenFileDialog
             {
@@ -85,6 +85,7 @@ namespace Contact_Manager_FL_MG_JW
                 MessageBox.Show($"Fehler beim Import: {ex.Message}", "Fehler",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            viewAllPanel.UpdateDashboard();
         }
 
     }

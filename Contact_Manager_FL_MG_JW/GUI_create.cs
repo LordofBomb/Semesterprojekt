@@ -17,7 +17,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace Contact_Manager_FL_MG_JW
 {
-    public partial class GUI_Create : Form
+    public partial class GUI_Create : Form //Form in welcher sich alle Felder befinden um neue Einträge einzufügen, Einträge zu bearbeiten oder anzuzeigen
     {
         public GUI_Create()
         {
@@ -25,7 +25,7 @@ namespace Contact_Manager_FL_MG_JW
             radioGroupboxHide();
         }
 
-        private void rbttCustomer_CheckedChanged(object sender, EventArgs e)
+        private void rbttCustomer_CheckedChanged(object sender, EventArgs e) //Radiobutton für Kunden
         {
             if (rbttCustomer.Checked)
             {
@@ -35,7 +35,7 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void rbttEmployee_CheckedChanged(object sender, EventArgs e)
+        private void rbttEmployee_CheckedChanged(object sender, EventArgs e) //Radiobutton für Mitarbeiter
         {
             if (rbttEmployee.Checked)
             {
@@ -43,14 +43,14 @@ namespace Contact_Manager_FL_MG_JW
                 groupBoxCustomer.Visible = false;
             }
         }
-        private void radioGroupboxHide()
+        private void radioGroupboxHide() //Versteckt standardmässig alle Groupboxen, um später die richtigen zeigen zu können.
         {
             groupBoxCustomer.Visible = false;
             groupBoxEmployee.Visible = false;
             groupBoxTrainee.Visible = false;
         }
 
-        private void ChbTrainee_CheckedChanged(object sender, EventArgs e)
+        private void ChbTrainee_CheckedChanged(object sender, EventArgs e) //zeigt Lernender Groupbox wenn Checkbox ausgewählt ist
         {
             groupBoxTrainee.Visible = ChbTrainee.Checked;
         }
@@ -72,7 +72,7 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void ChkbExitDate_CheckedChanged(object sender, EventArgs e)
+        private void ChkbExitDate_CheckedChanged(object sender, EventArgs e) //Zeigt oder versteckt Austrittsdatum Date
         {
             if (ChkbExitDate.Checked)
             {
@@ -84,7 +84,7 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void BtnDelete_Click(object sender, EventArgs e)
+        private void BtnDelete_Click(object sender, EventArgs e) //Löscht den aktuell geöffneten Eintrag aus der Datenbank
         {
 
             if (this.Tag == null)
@@ -152,7 +152,7 @@ namespace Contact_Manager_FL_MG_JW
             }
         }
 
-        private void btnExportCsv_Click(object sender, EventArgs e)
+        private void btnExportCsv_Click(object sender, EventArgs e) //Exportiert den geöffneten Eintrag als csv
         {
             using (var dlg = new SaveFileDialog())
             {
@@ -209,13 +209,14 @@ namespace Contact_Manager_FL_MG_JW
         "Status",
 
         // Kunde / Firma
-        "Firmennamen",
+        "Firmenname",
         "Geschaeftsadresse",
         "Geschaeftsnummer",
         "Strasse (Kunde)",
         "PLZ (Kunde)",
         "Ort (Kunde)",
         "Telefonnr/Handynr (Kunde)",
+        "Notiz",
 
         // Mitarbeiter
         "Eintrittsdatum",
@@ -230,6 +231,7 @@ namespace Contact_Manager_FL_MG_JW
         "Standortadresse",
         "Abteilung",
         "Taetigkeitsbezeichnung",
+        "Beschäftigungsgrad",
         "Kaderstufe",
         "Telefonnummer intern",
         "Lehrling",
@@ -253,13 +255,14 @@ namespace Contact_Manager_FL_MG_JW
             row["Status"] = ddbStatus?.Text ?? "";
 
             // Kunden
-            row["Firmennamen"] = txtbCoName?.Text ?? "";
+            row["Firmenname"] = txtbCoName?.Text ?? "";
             row["Geschaeftsadresse"] = txtbCoAddresse?.Text ?? "";
             row["Geschaeftsnummer"] = txtbCoPhoneNr?.Text ?? "";
             row["Strasse (Kunde)"] = txtbPrStreet?.Text ?? "";
             row["PLZ (Kunde)"] = txtprplz?.Text ?? "";
             row["Ort (Kunde)"] = TxtbCoPlace?.Text ?? "";
             row["Telefonnr/Handynr (Kunde)"] = txtbPrPhone?.Text ?? "";
+            row["Notiz"] = TxtbNote?.Text ?? "";
 
             // Mitarbeiter
             row["Eintrittsdatum"] = dtphiringdate != null ? dtphiringdate.Value.ToString("yyyy-MM-dd") : "";
@@ -274,6 +277,7 @@ namespace Contact_Manager_FL_MG_JW
             row["Standortadresse"] = ddbLoAddress?.Text ?? "";
             row["Abteilung"] = ddbDepartment?.Text ?? "";
             row["Taetigkeitsbezeichnung"] = txtbRole?.Text ?? "";
+            row["Beschäftigungsgrad"] = nudEmpLevel.Value;
             row["Kaderstufe"] = ddbCadreLvl?.Text ?? "";
             row["Telefonnummer intern"] = txtbIntPhNr?.Text ?? "";
             row["Lehrling"] = (ChbTrainee?.Checked ?? false) ? "true" : "false";
