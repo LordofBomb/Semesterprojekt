@@ -160,9 +160,10 @@ namespace Contact_Manager_FL_MG_JW
                             var bearbeitenFormular = new GUI_Create();
                             bearbeitenFormular.BtnSave.Text = "Eintrag Aktualisieren";
 
+
                             if (!row.IsNull("mitarbeiternummer"))
                             {
-
+                                bearbeitenFormular.rbttCustomer.Enabled = false;
                                 bearbeitenFormular.rbttEmployee.Checked = true;
                                 bearbeitenFormular.lblEmpNrOut.Text = row.Field<string>("Mitarbeiternummer");
                                 bearbeitenFormular.txtbAHVNr.Text = row.Field<string>("ahvnummer");
@@ -202,7 +203,7 @@ namespace Contact_Manager_FL_MG_JW
 
 
                                 bearbeitenFormular.rbttCustomer.Checked = true;
-
+                                bearbeitenFormular.rbttEmployee.Enabled = false;
                                 string kundentyp = row.Field<string>("kundentyp");
                                 switch (kundentyp)
                                 {
