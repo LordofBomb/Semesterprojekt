@@ -48,6 +48,7 @@ namespace Contact_Manager_FL_MG_JW
                         cmd.ExecuteNonQuery();
                     }
                 }
+                viewAllPanel.UpdateDashboard();
             }
         }
 

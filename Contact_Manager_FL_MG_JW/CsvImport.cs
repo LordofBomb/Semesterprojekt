@@ -62,18 +62,18 @@ namespace Contact_Manager_FL_MG_JW
             //SQL Statement für die Mitarbeitertabelle
             using var cmdInsMitarb = new SQLiteCommand(@"
                 INSERT INTO Mitarbeiter (
-                    eintrittsdatum, strasse, PLZ, Ort, handynummer, beschäftigungsgrad, abteilung, kaderstufe,
+                    Mitarbeiternummer, eintrittsdatum, strasse, PLZ, Ort, handynummer, beschäftigungsgrad, abteilung, kaderstufe,
                     ahvnummer, austrittsdatum, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid
                 ) VALUES (
-                    @eintritt, @strasse, @plz, @ort, @handy, @grad, @abteilung, @kader,
+                    @Mitarbeiternummer, @eintritt, @strasse, @plz, @ort, @handy, @grad, @abteilung, @kader,
                     @ahv, @austritt, @nationalitaet, @standort, @taetigkeit, @telintern, @globalid
                 );
                 SELECT last_insert_rowid();", conn, tx);
 
             //SQL Statement für die Lernender Tabelle
             using var cmdInsLernender = new SQLiteCommand(@"
-                INSERT INTO Lernender (lehrjahre, aktuelleslehrjahr, mitarbeiterid)
-                VALUES (@lehrjahre, @aktuelles, @mitarbId);", conn, tx);
+                INSERT INTO Lernender (lehrjahre, aktuelleslehrjahr, globalid)
+                VALUES (@lehrjahre, @aktuelles, @globalid);", conn, tx);
 
             try
             {
@@ -138,7 +138,7 @@ namespace Contact_Manager_FL_MG_JW
                             if (!string.IsNullOrWhiteSpace(firmenname) || !string.IsNullOrWhiteSpace(gesAdr) || !string.IsNullOrWhiteSpace(gesNr))
                                 looksKunde = true;
 
-                            string? anyMitarb = Val(row, H, "Eintrittsdatum", "Beschaeftigungsgrad", "Beschäftigungsgrad", "Abteilung", "Kaderstufe",
+                            string? anyMitarb = Val(row, H, "Mitarbeiternummer", "Eintrittsdatum", "Beschaeftigungsgrad", "Beschäftigungsgrad", "Abteilung", "Kaderstufe",
                                                        "AHVNummer", "AHV", "AHV-Nr", "AHVNr", "Nationalitaet", "Nationalität",
                                                        "Standort", "Taetigkeitsbezeichnung", "Tätigkeitsbezeichnung", "TelefonnummerIntern",
                                                        "Austrittsdatum");
@@ -173,10 +173,11 @@ namespace Contact_Manager_FL_MG_JW
                         else
                         {
                             // --- Mitarbeiter ---
-                            string? strasse = FixUmlauts(Val(row, H, "Strasse", "Straße"));
-                            string? plz = Val(row, H, "PLZ");
-                            string? ort = FixUmlauts(Val(row, H, "Ort"));
-                            string? handy = Val(row, H, "Handynummer", "Mobile", "TelefonMobil");
+                            string? mitarbeiternummer = FixUmlauts(Val(row, H, "Mitarbeiternummer"));
+                            string? strasse = FixUmlauts(Val(row, H, "Strasse (Mitarbeiter)", "Straße (Mitarbeiter)"));
+                            string? plz = Val(row, H, "PLZ (Mitarbeiter)");
+                            string? ort = FixUmlauts(Val(row, H, "Ort (Mitarbeiter)"));
+                            string? handy = Val(row, H, "Handynummer", "Mobile", "TelefonMobil", "Mobiltelefon");
 
                             string? eintrittStr = Val(row, H, "Eintrittsdatum");
                             string? austrittStr = Val(row, H, "Austrittsdatum");
@@ -188,11 +189,12 @@ namespace Contact_Manager_FL_MG_JW
                             string? kader = FixUmlauts(Val(row, H, "Kaderstufe"));
                             string? ahv = Val(row, H, "AHVNummer", "AHV", "AHV-Nr", "AHVNr");
                             string? nat = FixUmlauts(Val(row, H, "Nationalitaet", "Nationalität"));
-                            string? stand = FixUmlauts(Val(row, H, "Standort"));
+                            string? stand = FixUmlauts(Val(row, H, "Standortadresse"));
                             string? taet = FixUmlauts(Val(row, H, "Taetigkeitsbezeichnung", "Tätigkeitsbezeichnung"));
                             string? telIn = Val(row, H, "TelefonnummerIntern", "TelIntern");
 
                             cmdInsMitarb.Parameters.Clear();
+                            cmdInsMitarb.Parameters.AddWithValue("@Mitarbeiternummer", mitarbeiternummer ?? (object?)DBNull.Value);
                             cmdInsMitarb.Parameters.AddWithValue("@eintritt", (object?)eintrittOut ?? DBNull.Value);
                             cmdInsMitarb.Parameters.AddWithValue("@strasse", strasse ?? (object)DBNull.Value);
                             cmdInsMitarb.Parameters.AddWithValue("@plz", plz ?? (object)DBNull.Value);
@@ -209,20 +211,32 @@ namespace Contact_Manager_FL_MG_JW
                             cmdInsMitarb.Parameters.AddWithValue("@telintern", telIn ?? (object)DBNull.Value);
                             cmdInsMitarb.Parameters.AddWithValue("@globalid", globalId);
 
-                            long mitarbId = (long)(long?)cmdInsMitarb.ExecuteScalar()!;
+                            long Mitarbeiternummer = (long)(long?)cmdInsMitarb.ExecuteScalar()!;
                             summary.InsertedMitarbeiter++;
 
                             // Lernender
-                            string? lehrjahre = Val(row, H, "Lehrjahre");
-                            string? aktuelles = Val(row, H, "AktuellesLehrjahr", "AktuellesLehrjahr");
-                            if (!string.IsNullOrWhiteSpace(lehrjahre) || !string.IsNullOrWhiteSpace(aktuelles))
+                            string? lehrlingStr = Val(row, H, "Lehrling");
+                            bool isLehrling = false;
+
+                            if (!string.IsNullOrWhiteSpace(lehrlingStr))
                             {
-                                cmdInsLernender.Parameters.Clear();
-                                cmdInsLernender.Parameters.AddWithValue("@lehrjahre", FixUmlauts(lehrjahre) ?? (object)DBNull.Value);
-                                cmdInsLernender.Parameters.AddWithValue("@aktuelles", FixUmlauts(aktuelles) ?? (object)DBNull.Value);
-                                cmdInsLernender.Parameters.AddWithValue("@mitarbId", mitarbId);
-                                cmdInsLernender.ExecuteNonQuery();
-                                summary.InsertedLernende++;
+                                var normalized = lehrlingStr.Trim().ToLowerInvariant();
+                                if (normalized is "1" or "ja" or "true" or "y" or "yes")
+                                    isLehrling = true;
+                            }
+                            if (isLehrling)
+                            {
+                                string? lehrjahre = Val(row, H, "Anzahl Ausbildungsjahre");
+                                string? aktuelles = Val(row, H, "Aktuelles Ausbildungsjahr", "AktuellesLehrjahr");
+                                if (!string.IsNullOrWhiteSpace(lehrjahre) || !string.IsNullOrWhiteSpace(aktuelles))
+                                {
+                                    cmdInsLernender.Parameters.Clear();
+                                    cmdInsLernender.Parameters.AddWithValue("@lehrjahre", FixUmlauts(lehrjahre) ?? (object)DBNull.Value);
+                                    cmdInsLernender.Parameters.AddWithValue("@aktuelles", FixUmlauts(aktuelles) ?? (object)DBNull.Value);
+                                    cmdInsLernender.Parameters.AddWithValue("@globalid", globalId);
+                                    cmdInsLernender.ExecuteNonQuery();
+                                    summary.InsertedLernende++;
+                                }
                             }
                         }
                     }

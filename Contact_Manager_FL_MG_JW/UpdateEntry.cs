@@ -41,11 +41,10 @@ namespace Contact_Manager_FL_MG_JW
                         Geschlecht = @Geschlecht,
                         `E-Mail` = @Email,
                         Geburtstag = @Geburtstag,
-                        Status = @Status
+                        Status = @Status,
+                        Accounttyp = @Accounttyp
                     WHERE globalid = @Id; 
                     ";
-
-
 
                 using (var command = new SQLiteCommand(sql, connection))
                 {
@@ -55,10 +54,35 @@ namespace Contact_Manager_FL_MG_JW
                     command.Parameters.AddWithValue("@Name", gui.txtbLastName.Text);
                     command.Parameters.AddWithValue("@Geschlecht", gui.ddlGender.Text);
                     command.Parameters.AddWithValue("@Email", gui.txtbEMail.Text);
-                    command.Parameters.AddWithValue("@Geburtstag", gui.dtpBirthday.Value.ToString("O"));
+                    command.Parameters.AddWithValue("@Geburtstag", gui.dtpBirthday.Value.ToString("yyyy-MM-dd"));
                     command.Parameters.AddWithValue("@Status", gui.ddbStatus.Text);
-                    command.Parameters.AddWithValue("@Id", globalId);
+                    string acctype = "";
+                    if (gui.rbttEmployee.Checked == true)
+                    {
+                        acctype = "Mitarbeiter";
 
+                    }
+                    else
+                    {
+                        acctype = "Kunde";
+                        string sqlmn = @"
+                        UPDATE Mitarbeiter SET
+                            mitarbeiternummer = @mitarbeiternummer
+                        WHERE globalid = @globalid;";
+
+
+                        using (var commandmitarbeiternummer = new SQLiteCommand(sqlmn, connection))
+                        {
+                            long? mitarbeiternummer = null;
+
+                            commandmitarbeiternummer.Parameters.AddWithValue("@mitarbeiternummer", mitarbeiternummer.HasValue ? (object)mitarbeiternummer.Value : DBNull.Value);
+                            commandmitarbeiternummer.Parameters.AddWithValue("@globalid", globalId);
+
+                            commandmitarbeiternummer.ExecuteNonQuery();
+                        }
+                    }
+                    command.Parameters.AddWithValue("@Accounttyp", acctype);
+                    command.Parameters.AddWithValue("@Id", globalId);
                     if (gui.rbttEmployee.Checked && !gui.rbttCustomer.Checked)
                     {
                         if (!ValidateRequiredFields(gui.groupBoxEmployee))
@@ -66,83 +90,129 @@ namespace Contact_Manager_FL_MG_JW
                             MessageBox.Show("Bitte alle Pflichtfelder ausfüllen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
+                        string sqle = @"
+                        UPDATE Mitarbeiter SET
+                            eintrittsdatum = @eintrittsdatum,
+                            strasse = @strasse,
+                            PLZ = @PLZ,
+                            Ort = @Ort,
+                            handynummer = @handynummer,
+                            beschäftigungsgrad = @beschäftigungsgrad,
+                            abteilung = @abteilung,
+                            kaderstufe = @kaderstufe,
+                            ahvnummer = @ahvnummer,
+                            austrittsdatum = @austrittsdatum,
+                            nationalität = @nationalität,
+                            standort = @standort,
+                            tätigkeitsbezeichnung = @tätigkeitsbezeichnung,
+                            telefonnummerintern = @telefonnummerintern
+                        WHERE globalid = @globalid;";
+
+
+                        using (var command2 = new SQLiteCommand(sqle, connection))
+                        {
+                            string eintrittsdatum = gui.dtphiringdate.Value.ToString("yyyy-MM-dd");
+                            string austrittsdatum = gui.dtpExitDate.Value.ToString("yyyy-MM-dd");
+                            string strasse = gui.txtbEmpStreet.Text;
+                            string PLZ = gui.txtbEmpPlz.Text;
+                            string Ort = gui.txtbEmpPlace.Text;
+                            string handynummer = gui.txtbMoPhone.Text;
+                            string beschaeftigungsgrad = gui.nudEmpLevel.Text;
+                            string abteilung = gui.ddbDepartment.Text;
+                            string kaderstufe = gui.ddbCadreLvl.Text;
+                            string ahvnummer = gui.txtbAHVNr.Text;
+                            string nationalitaet = gui.txtbNationality.Text;
+                            string standort = gui.ddbLoAddress.Text;
+                            string taetigkeit = gui.txtbRole.Text;
+                            string telefonintern = gui.txtbIntPhNr.Text;
+
+                            command2.Parameters.AddWithValue("@eintrittsdatum", eintrittsdatum);
+                            command2.Parameters.AddWithValue("@strasse", strasse);
+                            command2.Parameters.AddWithValue("@PLZ", PLZ);
+                            command2.Parameters.AddWithValue("@Ort", Ort);
+                            command2.Parameters.AddWithValue("@handynummer", handynummer);
+                            command2.Parameters.AddWithValue("@beschäftigungsgrad", beschaeftigungsgrad);
+                            command2.Parameters.AddWithValue("@abteilung", abteilung);
+                            command2.Parameters.AddWithValue("@kaderstufe", kaderstufe);
+                            command2.Parameters.AddWithValue("@ahvnummer", ahvnummer);
+                            command2.Parameters.AddWithValue("@austrittsdatum", austrittsdatum);
+                            command2.Parameters.AddWithValue("@nationalität", nationalitaet);
+                            command2.Parameters.AddWithValue("@standort", standort);
+                            command2.Parameters.AddWithValue("@tätigkeitsbezeichnung", taetigkeit);
+                            command2.Parameters.AddWithValue("@telefonnummerintern", telefonintern);
+                            command2.Parameters.AddWithValue("@globalid", globalId);
+
+                            command2.ExecuteNonQuery();
+                        }
                         if (gui.ChbTrainee.Checked)
                         {
-                            long mitarbeiterId = -1;
-
-                            string sqlGetMitarbeiterId = "SELECT mitarbeiternummer FROM Mitarbeiter WHERE globalid = @globalid";
-                            using (var cmdGetId = new SQLiteCommand(sqlGetMitarbeiterId, connection))
+                            bool lernenderExistiert;
+                            using (var cmdCheck = new SQLiteCommand(
+                                       "SELECT 1 FROM Lernender WHERE globalid = @globalId LIMIT 1", connection))
                             {
-                                cmdGetId.Parameters.AddWithValue("@globalid", globalId);
-                                var result = cmdGetId.ExecuteScalar();
-
-                                if (result != null && long.TryParse(result.ToString(), out var id))
-                                {
-                                    mitarbeiterId = id;
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Mitarbeiter-ID konnte nicht ermittelt werden.", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return;
-                                }
-                            }
-
-                            bool lernenderExistiert = false;
-                            string sqlCheck = "SELECT 1 FROM Lernender WHERE mitarbeiterid = @mitarbeiterid LIMIT 1";
-                            using (var cmdCheck = new SQLiteCommand(sqlCheck, connection))
-                            {
-                                cmdCheck.Parameters.AddWithValue("@mitarbeiterid", mitarbeiterId);
-                                using (var reader = cmdCheck.ExecuteReader())
-                                {
-                                    lernenderExistiert = reader.HasRows;
-                                }
+                                cmdCheck.Parameters.AddWithValue("@globalId", globalId);
+                                using var reader = cmdCheck.ExecuteReader();
+                                lernenderExistiert = reader.HasRows;
                             }
 
                             if (lernenderExistiert)
                             {
-                                string sqlUpdate = @"
-                                                UPDATE Lernender 
-                                                SET 
-                                                    lehrjahre = @lehrjahre, 
-                                                    aktuelleslehrjahr = @aktuelleslehrjahr 
-                                                WHERE mitarbeiterid = @mitarbeiterid";
+                                const string sqlUpdate = @"
+                                                        UPDATE Lernender
+                                                        SET lehrjahre = @lehrjahre, 
+                                                            aktuelleslehrjahr = @aktuelleslehrjahr
+                                                        WHERE globalid = @globalId";
 
-                                using (var cmdUpdate = new SQLiteCommand(sqlUpdate, connection))
+                                using (var cmdU = new SQLiteCommand(sqlUpdate, connection))
                                 {
-                                    cmdUpdate.Parameters.AddWithValue("@lehrjahre", gui.txtbNrOfYearsOfAppr.Text);
-                                    cmdUpdate.Parameters.AddWithValue("@aktuelleslehrjahr", gui.txtbWhYearsOfAppr.Text);
-                                    cmdUpdate.Parameters.AddWithValue("@mitarbeiterid", mitarbeiterId);
+                                    cmdU.Parameters.AddWithValue("@lehrjahre", gui.txtbNrOfYearsOfAppr.Text);
+                                    cmdU.Parameters.AddWithValue("@aktuelleslehrjahr", gui.txtbWhYearsOfAppr.Text);
+                                    cmdU.Parameters.AddWithValue("@globalId", globalId);
 
-                                    cmdUpdate.ExecuteNonQuery();
+                                    int rows = cmdU.ExecuteNonQuery();
+
+                                    if (rows == 0)
+                                    {
+                                        MessageBox.Show("Kein Datensatz zum Aktualisieren gefunden.",
+                                                        "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    }
                                 }
                             }
                             else
                             {
-                                if (!ValidateRequiredFields(gui.groupBoxTrainee))
-                                {
-                                    MessageBox.Show("Bitte alle Pflichtfelder ausfüllen!", "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    return;
-                                }
-                                string sqlInsert = @"
-                                            INSERT INTO Lernender 
-                                            (lehrjahre, aktuelleslehrjahr, mitarbeiterid) 
-                                            VALUES 
-                                            (@lehrjahre, @aktuelleslehrjahr, @mitarbeiterid)";
+                                const string sqlInsert = @"
+                                                    INSERT INTO Lernender (globalid, lehrjahre, aktuelleslehrjahr)
+                                                    VALUES (@globalId, @lehrjahre, @aktuelleslehrjahr)";
 
-                                using (var cmdInsert = new SQLiteCommand(sqlInsert, connection))
-                                {
-                                    cmdInsert.Parameters.AddWithValue("@lehrjahre", gui.txtbNrOfYearsOfAppr.Text);
-                                    cmdInsert.Parameters.AddWithValue("@aktuelleslehrjahr", gui.txtbWhYearsOfAppr.Text);
-                                    cmdInsert.Parameters.AddWithValue("@mitarbeiterid", mitarbeiterId);
-
-                                    cmdInsert.ExecuteNonQuery();
-                                }
+                                using var cmdI = new SQLiteCommand(sqlInsert, connection);
+                                cmdI.Parameters.AddWithValue("@globalId", globalId);
+                                cmdI.Parameters.AddWithValue("@lehrjahre", gui.txtbNrOfYearsOfAppr.Text);
+                                cmdI.Parameters.AddWithValue("@aktuelleslehrjahr", gui.txtbWhYearsOfAppr.Text);
+                                cmdI.ExecuteNonQuery();
                             }
                         }
-          
+                        else
+                        {
+                            // Prüfen, ob ein Lernender-Datensatz existiert
+                            bool lernenderExistiert;
+                            using (var cmdCheck = new SQLiteCommand(
+                                       "SELECT 1 FROM Lernender WHERE globalid = @globalId LIMIT 1", connection))
+                            {
+                                cmdCheck.Parameters.AddWithValue("@globalId", globalId);
+                                using var reader = cmdCheck.ExecuteReader();
+                                lernenderExistiert = reader.HasRows;
+                            }
+
+                            if (lernenderExistiert)
+                            {
+                                const string sqlDelete = "DELETE FROM Lernender WHERE globalid = @globalId";
+                                using var cmdDel = new SQLiteCommand(sqlDelete, connection);
+                                cmdDel.Parameters.AddWithValue("@globalId", globalId);
+                                cmdDel.ExecuteNonQuery();
+                            }
+                        }
 
                     }
-                
                     else if (gui.rbttCustomer.Checked && !gui.rbttEmployee.Checked)
                     {
                         if (!ValidateRequiredFields(gui.groupBoxCustomer))
@@ -204,7 +274,6 @@ namespace Contact_Manager_FL_MG_JW
                             MessageBoxIcon.Error
                         );
                     }
-
                     try
                     {
                         command.ExecuteNonQuery();

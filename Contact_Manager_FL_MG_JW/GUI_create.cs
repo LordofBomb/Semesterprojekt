@@ -219,6 +219,7 @@ namespace Contact_Manager_FL_MG_JW
         "Notiz",
 
         // Mitarbeiter
+        "Mitarbeiternummer",
         "Eintrittsdatum",
         "Austrittsdatum aktiv",
         "Austrittsdatum",
@@ -265,6 +266,7 @@ namespace Contact_Manager_FL_MG_JW
             row["Notiz"] = TxtbNote?.Text ?? "";
 
             // Mitarbeiter
+            row["Mitarbeiternummer"] = lblEmpNrOut?.Text ?? "";
             row["Eintrittsdatum"] = dtphiringdate != null ? dtphiringdate.Value.ToString("yyyy-MM-dd") : "";
             row["Austrittsdatum aktiv"] = (ChkbExitDate?.Checked ?? false) ? "true" : "false";
             row["Austrittsdatum"] = dtpExitDate != null ? dtpExitDate.Value.ToString("yyyy-MM-dd") : "";

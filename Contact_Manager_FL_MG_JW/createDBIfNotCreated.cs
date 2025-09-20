@@ -58,7 +58,7 @@ namespace Contact_Manager_FL_MG_JW
                     // Mitarbeiter
                     string createMitarbeiter = @"
                     CREATE TABLE IF NOT EXISTS Mitarbeiter (
-                    mitarbeiternummer INTEGER PRIMARY KEY AUTOINCREMENT,
+                    mitarbeiternummer TEXT,
                     eintrittsdatum TEXT,
                     strasse TEXT,
                     PLZ TEXT,
@@ -82,8 +82,8 @@ namespace Contact_Manager_FL_MG_JW
                     CREATE TABLE IF NOT EXISTS Lernender (
                     lehrjahre TEXT,
                     aktuelleslehrjahr TEXT,
-                    mitarbeiterid INTEGER,
-                    FOREIGN KEY(mitarbeiterid) REFERENCES Mitarbeiter(mitarbeiternummer) ON DELETE CASCADE
+                    globalid INTEGER,
+                    FOREIGN KEY(globalid) REFERENCES Mitarbeiter(globalid) ON DELETE CASCADE
                     );";
 
                     string[] sqlBefehle = { createGlobal, createKunde, createMitarbeiter, createLernender };

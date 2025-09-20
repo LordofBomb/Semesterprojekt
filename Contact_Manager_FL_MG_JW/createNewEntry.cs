@@ -25,7 +25,7 @@ namespace Contact_Manager_FL_MG_JW
             string vorname = gui.txtbFirstName.Text;
             string nachname = gui.txtbLastName.Text;
             string geschlecht = gui.ddlGender.Text;
-            string geburtsdatum = gui.dtpBirthday.Value.ToString("O");
+            string geburtsdatum = gui.dtpBirthday.Value.ToString("yyyy-MM-dd");
             string mail = gui.txtbEMail.Text;
             string status = gui.ddbStatus.Text;
             string acctype = "";
@@ -130,12 +130,26 @@ namespace Contact_Manager_FL_MG_JW
 
                         string updateMitarbeiter = @"
                         INSERT INTO Mitarbeiter 
-                        (eintrittsdatum, strasse, PLZ, Ort, handynummer, beschäftigungsgrad, abteilung, kaderstufe, ahvnummer, austrittsdatum, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid)
+                        (Mitarbeiternummer, eintrittsdatum, strasse, PLZ, Ort, handynummer, beschäftigungsgrad, abteilung, kaderstufe, ahvnummer, austrittsdatum, nationalität, standort, tätigkeitsbezeichnung, telefonnummerintern, globalid)
                         VALUES 
-                        (@eintritt, @strasse, @PLZ, @Ort, @handy, @grad, @abteilung, @kader, @ahv, @austritt, @nationalitaet, @standort, @tätigkeitsbezeichnung, @telefon, @globalid);";
+                        (@Mitarbeiternummer, @eintritt, @strasse, @PLZ, @Ort, @handy, @grad, @abteilung, @kader, @ahv, @austritt, @nationalitaet, @standort, @tätigkeitsbezeichnung, @telefon, @globalid);";
 
                         var cmdMitarbeiter = new SQLiteCommand(updateMitarbeiter, connection);
 
+                        long neueMitarbeiternummer;
+                        using (var getMaxCmd = new SQLiteCommand("SELECT MAX(mitarbeiternummer) FROM Mitarbeiter;", connection))
+                        {
+                            object result = getMaxCmd.ExecuteScalar();
+                            if (result != DBNull.Value && result != null)
+                            {
+                                neueMitarbeiternummer = Convert.ToInt64(result) + 1;
+                            }
+                            else
+                            {
+                                neueMitarbeiternummer = 1; // erste Nummer
+                            }
+                        }
+                        cmdMitarbeiter.Parameters.AddWithValue("@Mitarbeiternummer", neueMitarbeiternummer);
                         cmdMitarbeiter.Parameters.AddWithValue("@eintritt", eintrittsdatum);
                         cmdMitarbeiter.Parameters.AddWithValue("@strasse", strasse);
                         cmdMitarbeiter.Parameters.AddWithValue("@PLZ", PLZ);
@@ -155,20 +169,18 @@ namespace Contact_Manager_FL_MG_JW
 
                         if (gui.ChbTrainee.Checked)
                         {
-                            long mitarbeiterId = connection.LastInsertRowId;
-
                             string lehrjahre = gui.txtbNrOfYearsOfAppr.Text;
                             string aktuelleslehrjahr = gui.txtbWhYearsOfAppr.Text;
                             string updateLernender = @"                         
                             INSERT INTO Lernender
-                            (lehrjahre, aktuelleslehrjahr, mitarbeiterID)
+                            (lehrjahre, aktuelleslehrjahr, globalid)
                             VALUES
-                            (@lehrjahre, @aktuelleslehrjahr, @mitarbeiterID);";
+                            (@lehrjahre, @aktuelleslehrjahr, @globalid);";
 
                             var cmdLernender = new SQLiteCommand(updateLernender, connection);
                             cmdLernender.Parameters.AddWithValue("@lehrjahre", lehrjahre);
                             cmdLernender.Parameters.AddWithValue("@aktuelleslehrjahr", aktuelleslehrjahr);
-                            cmdLernender.Parameters.AddWithValue("@mitarbeiterID", mitarbeiterId);
+                            cmdLernender.Parameters.AddWithValue("@globalid", globalId);
 
                             cmdLernender.ExecuteNonQuery();
                         }

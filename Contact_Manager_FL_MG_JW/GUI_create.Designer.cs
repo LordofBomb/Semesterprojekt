@@ -195,10 +195,12 @@
             // dtpBirthday
             // 
             dtpBirthday.Anchor = AnchorStyles.Top;
+            dtpBirthday.CustomFormat = "dd-mm-yyyy";
             dtpBirthday.Location = new Point(623, 119);
             dtpBirthday.Name = "dtpBirthday";
             dtpBirthday.Size = new Size(200, 23);
             dtpBirthday.TabIndex = 160;
+            dtpBirthday.Value = new DateTime(2025, 9, 20, 0, 0, 0, 0);
             // 
             // lblBirthday
             // 
@@ -735,7 +737,8 @@
             TxtbNote.Location = new Point(129, 198);
             TxtbNote.Multiline = true;
             TxtbNote.Name = "TxtbNote";
-            TxtbNote.Size = new Size(201, 93);
+            TxtbNote.ScrollBars = ScrollBars.Vertical;
+            TxtbNote.Size = new Size(292, 93);
             TxtbNote.TabIndex = 296;
             // 
             // LblNote

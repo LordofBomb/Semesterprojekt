@@ -143,7 +143,7 @@ namespace Contact_Manager_FL_MG_JW
             {
                 connection.Open();
 
-                string sql = "SELECT \r\n    g.*,\r\n    m.strasse AS mitarbeiter_strasse,\r\n    m.PLZ AS mitarbeiter_PLZ,\r\n    m.Ort AS mitarbeiter_Ort,\r\n    m.*,\r\n    l.*,\r\n    k.strasse AS kunde_strasse,\r\n    k.PLZ AS kunde_PLZ,\r\n    k.Ort AS kunde_Ort,\r\n    k.* \r\nFROM Global g\r\nLEFT JOIN Mitarbeiter m ON g.globalid = m.globalid\r\nLEFT JOIN Lernender l ON m.mitarbeiternummer = l.mitarbeiterID\r\nLEFT JOIN Kunde k ON g.globalid = k.globalid;\r\n";
+                string sql = "SELECT \r\n    g.*,\r\n    m.strasse AS mitarbeiter_strasse,\r\n    m.PLZ AS mitarbeiter_PLZ,\r\n    m.Ort AS mitarbeiter_Ort,\r\n    m.*,\r\n    l.*,\r\n    k.strasse AS kunde_strasse,\r\n    k.PLZ AS kunde_PLZ,\r\n    k.Ort AS kunde_Ort,\r\n    k.* \r\nFROM Global g\r\nLEFT JOIN Mitarbeiter m ON g.globalid = m.globalid\r\nLEFT JOIN Lernender l ON m.globalid = l.globalid\r\nLEFT JOIN Kunde k ON g.globalid = k.globalid;\r\n";
 
 
                 using (var command = new SQLiteCommand(sql, connection))
@@ -164,7 +164,7 @@ namespace Contact_Manager_FL_MG_JW
                             {
 
                                 bearbeitenFormular.rbttEmployee.Checked = true;
-                                bearbeitenFormular.lblEmpNrOut.Text = row.Field<long>("Mitarbeiternummer").ToString();
+                                bearbeitenFormular.lblEmpNrOut.Text = row.Field<string>("Mitarbeiternummer");
                                 bearbeitenFormular.txtbAHVNr.Text = row.Field<string>("ahvnummer");
                                 bearbeitenFormular.txtbEmpStreet.Text = row.Field<string>("mitarbeiter_strasse");
                                 bearbeitenFormular.txtbEmpPlz.Text = row.Field<string>("mitarbeiter_plz");
@@ -188,12 +188,13 @@ namespace Contact_Manager_FL_MG_JW
                                 bearbeitenFormular.txtbRole.Text = row.Field<string>("Tätigkeitsbezeichnung");
                                 bearbeitenFormular.nudEmpLevel.Text = row.Field<long>("Beschäftigungsgrad").ToString();
 
-                                if (!row.IsNull("mitarbeiterid") && !row.IsNull("lehrjahre"))
+                                if (!row.IsNull("globalid") &&
+                                    (!row.IsNull("lehrjahre") || !row.IsNull("aktuelleslehrjahr")))
                                 {
                                     bearbeitenFormular.ChbTrainee.Checked = true;
 
-                                    bearbeitenFormular.txtbNrOfYearsOfAppr.Text = row.Field<string>("lehrjahre");
-                                    bearbeitenFormular.txtbWhYearsOfAppr.Text = row.Field<string>("aktuelleslehrjahr");
+                                    bearbeitenFormular.txtbNrOfYearsOfAppr.Text = row.Field<string>("lehrjahre") ?? "";
+                                    bearbeitenFormular.txtbWhYearsOfAppr.Text = row.Field<string>("aktuelleslehrjahr") ?? "";
                                 }
                             }
                             else if (!row.IsNull("kundentyp"))
@@ -311,9 +312,7 @@ namespace Contact_Manager_FL_MG_JW
                     // Lernender löschen
                     string deleteLernender = @"
                 DELETE FROM Lernender 
-                WHERE mitarbeiterid IN (
-                    SELECT mitarbeiternummer FROM Mitarbeiter WHERE globalid = @globalid
-                );";
+                WHERE globalid = @globalid;";
 
                     using (var cmdLernender = new SQLiteCommand(deleteLernender, connection))
                     {
