@@ -475,7 +475,7 @@
             // dtphiringdate
             // 
             dtphiringdate.Location = new Point(548, 46);
-            dtphiringdate.MinDate = new DateTime(2024, 12, 31, 0, 0, 0, 0);
+            dtphiringdate.MinDate = new DateTime(1999, 12, 31, 0, 0, 0, 0);
             dtphiringdate.Name = "dtphiringdate";
             dtphiringdate.Size = new Size(200, 23);
             dtphiringdate.TabIndex = 260;
@@ -964,6 +964,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             ClientSize = new Size(969, 762);
+            Controls.Add(groupBoxEmployee);
             Controls.Add(label4);
             Controls.Add(btnExportCsv);
             Controls.Add(BtnDelete);
@@ -987,7 +988,6 @@
             Controls.Add(txtbTitel);
             Controls.Add(BtnSave);
             Controls.Add(groupBoxCustomer);
-            Controls.Add(groupBoxEmployee);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MaximumSize = new Size(1825, 1576);
